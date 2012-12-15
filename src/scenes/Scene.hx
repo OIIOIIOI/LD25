@@ -1,6 +1,6 @@
 package scenes;
 
-import flash.display.DisplayObject;
+import entities.Entity;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
 
@@ -12,10 +12,12 @@ import flash.events.MouseEvent;
 class Scene extends Sprite
 {
 	
+	private var m_entities:Array<Entity>;
 	public var theme:String;
 	
 	public function new () {
 		super();
+		m_entities = new Array<Entity>();
 		addEventListener(MouseEvent.CLICK, clickHandler);
 	}
 	
@@ -25,6 +27,12 @@ class Scene extends Sprite
 	
 	private function clickHandler (_event:MouseEvent) :Void {
 		
+	}
+	
+	public function update () :Void {
+		for (_e in m_entities) {
+			_e.update();
+		}
 	}
 	
 }

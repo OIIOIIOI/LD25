@@ -12,6 +12,7 @@ import flash.geom.Rectangle;
 import scenes.Credits;
 import scenes.Scene;
 import scenes.StartMenu;
+import scenes.Test;
 
 /**
  * ...
@@ -28,14 +29,16 @@ class Game extends Sprite
 	inline static public var MS:Float = 1000 / FPS;
 	
 	//static public var SO:SharedObject;
+	static public var instance:Game;
 	
-	private var scene:Scene;
+	public var scene:Scene;
 	
 	private var lastFrame:Float;// The last time the game was updated
 	
 	public function new () {
 		super();
 		
+		instance = this;
 		/*// Saved data
 		SO = SharedObject.getLocal("moutonsSave");
 		//SO.clear();
@@ -68,8 +71,8 @@ class Game extends Sprite
 		removeEventListener(Event.ADDED_TO_STAGE, init);
 		
 		// Init scene
-		changeScene(GameScene.startMenu);
-		//changeScene(GameScene.test);
+		//changeScene(GameScene.startMenu);
+		changeScene(GameScene.test);
 		
 		// Start main loop
 		lastFrame = 0;
@@ -99,6 +102,7 @@ class Game extends Sprite
 		scene = switch (_scene) {
 			case GameScene.startMenu:	new StartMenu();
 			case GameScene.credits:		new Credits();
+			case GameScene.test:		new Test(Test.MODE_BIRD);
 		}
 		addChild(scene);
 		/*// TODO Play music (make music)
@@ -113,7 +117,7 @@ class Game extends Sprite
 	private function update () :Void {
 		if (scene == null)	return;
 		// Update every entity
-		//scene.update();
+		scene.update();
 	}
 	
 }
@@ -121,7 +125,7 @@ class Game extends Sprite
 enum GameScene {
 	startMenu;
 	credits;
-	//test;
+	test;
 }
 
 
