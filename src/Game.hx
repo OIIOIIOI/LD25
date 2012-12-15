@@ -10,6 +10,7 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import scenes.Credits;
+import scenes.GameOver;
 import scenes.Scene;
 import scenes.StartMenu;
 
@@ -68,7 +69,8 @@ class Game extends Sprite
 		removeEventListener(Event.ADDED_TO_STAGE, init);
 		
 		// Init scene
-		changeScene(GameScene.startMenu);
+		//changeScene(GameScene.startMenu);
+		changeScene(GameScene.gameover);
 		//changeScene(GameScene.test);
 		
 		// Start main loop
@@ -99,6 +101,8 @@ class Game extends Sprite
 		scene = switch (_scene) {
 			case GameScene.startMenu:	new StartMenu();
 			case GameScene.credits:		new Credits();
+			case GameScene.gameover:	new GameOver();
+		
 		}
 		addChild(scene);
 		/*// TODO Play music (make music)
@@ -121,6 +125,7 @@ class Game extends Sprite
 enum GameScene {
 	startMenu;
 	credits;
+	gameover;
 	//test;
 }
 
