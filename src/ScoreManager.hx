@@ -14,13 +14,18 @@ class ScoreManager
 		score = 0;
 	}
 	
-	public static function add(amount:Int){
+	public static function add(amount:Int):Int{
 		score += amount;
 		return score;
 	}
 	
-	public static function substract(amount:Int){
+	public static function substract(amount:Int):Int{
 		score -= amount;
+		return score;
+	}
+	
+	public static function multiply(amount:Int):Int{
+		score *= amount;
 		return score;
 	}
 	
@@ -33,9 +38,9 @@ class ScoreManager
 		scoreBoard.sort(function(a:Int, b:Int) :Int { if (a > b) return 1; if (b > a) return -1; return 0; });
 	}
 	
-	public function new() 
+	/*public function new() 
 	{
 		
-	}
+	}*/
 	
 }
