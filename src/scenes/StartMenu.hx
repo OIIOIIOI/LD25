@@ -17,13 +17,16 @@ class StartMenu extends Scene
 	private var creditsbtnGraphics:CREDITBTN;
 	private var newgamebtnGraphics:NEWGAMEBTN;
 	private var scorebtnGraphics:SCOREBTN;
+	private var startmenubg:STARTMENUBG;
 	
 	
 	public function new () {
 		super();
+		startmenubg = new STARTMENUBG();
 		creditsbtnGraphics = new CREDITBTN();
 		newgamebtnGraphics = new NEWGAMEBTN();
 		scorebtnGraphics = new SCOREBTN();
+		addChild(startmenubg);
 		addChild(creditsbtnGraphics);
 		addChild(newgamebtnGraphics);
 		newgamebtnGraphics.y = 40;
@@ -36,6 +39,12 @@ class StartMenu extends Scene
 			//case m_test:
 				//trace("youpi");
 				//EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.credits }));
+			case scorebtnGraphics:
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.score } ));
+			case creditsbtnGraphics:
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.credits } ));
+			case newgamebtnGraphics:
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.charachoice } ));
 		}
 	}
 	

@@ -14,25 +14,20 @@ import Game;
 class Credits extends Scene
 {
 	
-	private var m_test:Sprite;
+	private var creditsbg:CREDITSBG;
+	private var backbtn:BACKBTN;
 	
 	public function new () {
 		super();
-		
-		m_test = new Sprite();
-		m_test.graphics.beginFill(0xFF0000);
-		m_test.graphics.drawRect(0, 0, 400, 200);
-		m_test.graphics.endFill();
-		m_test.buttonMode = true;
-		m_test.x = 200;
-		m_test.y = 200;
-		addChild(m_test);
+		creditsbg = new CREDITSBG();
+		backbtn =  new BACKBTN();
+		addChild(creditsbg);
+		addChild(backbtn);
 	}
 	
 	override private function clickHandler (_event:MouseEvent) :Void {
 		switch (_event.target) {
-			case m_test:
-				trace("youplala");
+			case backbtn:
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.startMenu }));
 		}
 	}
