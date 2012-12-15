@@ -9,6 +9,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.net.SharedObject;
 import scenes.CharaChoice;
 import scenes.Credits;
 import scenes.GameOver;
@@ -30,7 +31,7 @@ class Game extends Sprite
 	inline static public var FPS:UInt = 30;// How many times per second do we want the game to update
 	inline static public var MS:Float = 1000 / FPS;
 	
-	//static public var SO:SharedObject;
+	static public var SO:SharedObject;
 	
 	private var scene:Scene;
 	
@@ -39,33 +40,21 @@ class Game extends Sprite
 	public function new () {
 		super();
 		
-		/*// Saved data
-		SO = SharedObject.getLocal("moutonsSave");
+		// Saved data
+		SO = SharedObject.getLocal("seedsofwrath");
 		//SO.clear();
-		if (SO.data.levels == null || !Std.is(SO.data.levels, Array)) {
-			SO.data.levels = new Array<Dynamic>();
+		if (SO.data.scoresData == null || !Std.is(SO.data.scoresData, Array)) {
+			SO.data.scoresData = new Array<Dynamic>();
+			//SO.data.scoresData.push( { name:"SIMON", score:2000 }, { name:"GRMPF", score:9100 }, { name:"NI!", score:3400 }, { name:"NOC", score:4500 },  { name:"CAPTAIN", score:1100 } );
+			//SO.data.scoresData.sort(function(a:Int, b:Int):Int{ if (a > b) return 1; if (b > a) return -1; return 0; } );
 			SO.flush();
-		}*/
+		}
+		ScoreManager.initScoreData(SO.data.scoresData);
 		// Wait for the sprite to be added to the display list
 		addEventListener(Event.ADDED_TO_STAGE, init);
 	}
 	
-	/*private function getSavedState (_name:String) :Bool {
-		//return false;
-		var _SOI:Int = SOIndexOf(_name);
-		if (_SOI != -1) {
-			return SO.data.levels[_SOI].locked;
-		}
-		return true;
-	}
-	
-	static private function SOIndexOf (_name:String) :Int {
-		for (_i in 0...SO.data.levels.length) {
-			if (SO.data.levels[_i].name == _name)
-				return _i;
-		}
-		return -1;
-	}*/
+
 	
 	private function init (_event:Event) :Void {
 		removeEventListener(Event.ADDED_TO_STAGE, init);
