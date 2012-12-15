@@ -1,6 +1,7 @@
 package ;
 
 import flash.display.StageAlign;
+import flash.display.StageQuality;
 import flash.display.StageScaleMode;
 import flash.Lib;
 
@@ -9,15 +10,19 @@ import flash.Lib;
  * @author 01101101
  */
 
-class Main 
+class Main
 {
 	
-	static function main() 
+	static function main()
 	{
-		var stage = Lib.current.stage;
-		stage.scaleMode = StageScaleMode.NO_SCALE;
-		stage.align = StageAlign.TOP_LEFT;
-		// entry point
+		// Init
+		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
+		Lib.current.stage.align = StageAlign.TOP_LEFT;
+		Lib.current.stage.quality = StageQuality.LOW;
+		// Keyboard
+		KeyboardManager.init(Lib.current.stage);
+		// Create and add game
+		Lib.current.stage.addChild(new Game());
 	}
 	
 }
