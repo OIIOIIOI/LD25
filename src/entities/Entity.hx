@@ -1,6 +1,7 @@
 package entities;
 
 import flash.display.Sprite;
+import flash.geom.Rectangle;
 
 /**
  * ...
@@ -10,8 +11,11 @@ import flash.display.Sprite;
 class Entity extends Sprite
 {
 	
+	public var hitbox:Rectangle;
+	
 	public function new () {
 		super();
+		hitbox = new Rectangle(-5, -5, 10, 10);
 	}
 	
 	public function update () :Void {

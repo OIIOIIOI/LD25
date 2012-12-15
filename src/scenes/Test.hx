@@ -1,8 +1,10 @@
 package scenes;
 
 import entities.Corn;
+import entities.Nest;
 import entities.Poo;
 import entities.Scarecrow;
+import entities.Seed;
 import events.EventManager;
 import events.GameEvent;
 import scenes.Scene;
@@ -21,19 +23,35 @@ class Test extends Scene
 	public var mode:String;
 	public var bird:Bird;
 	public var scarecrow:Scarecrow;
+	public var seeds:Array<Seed>;
+	public var nest:Nest;
 	
 	public function new (_mode:String) {
 		super();
 		
 		mode = _mode;
 		
-		bird = new Bird(mode == MODE_BIRD);
+		bird = new Bird(this);
 		addChild(bird);
 		m_entities.push(bird);
 		
-		scarecrow = new Scarecrow(mode == MODE_SCARE);
+		scarecrow = new Scarecrow(this);
 		addChild(scarecrow);
 		m_entities.push(scarecrow);
+		
+		seeds = new Array<Seed>();
+		var _seed:Seed;
+		for (_i in 0...3) {
+			_seed = new Seed();
+			_seed.x = Std.random(700) + 100;
+			_seed.y = 290;
+			addChild(_seed);
+			m_entities.push(_seed);
+			seeds.push(_seed);
+		}
+		
+		nest = new Nest();
+		addChild(nest);
 		
 		EventManager.instance.addEventListener(GameEvent.BIRD_SHOOT, gameEventHandler);
 		EventManager.instance.addEventListener(GameEvent.SCARE_SHOOT, gameEventHandler);
