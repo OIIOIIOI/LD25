@@ -12,12 +12,10 @@ import flash.events.MouseEvent;
 class Scene extends Sprite
 {
 	
-	public var entities:Array<DisplayObject>;
 	public var theme:String;
 	
 	public function new () {
 		super();
-		entities = new Array<DisplayObject>();
 		addEventListener(MouseEvent.CLICK, clickHandler);
 	}
 	
