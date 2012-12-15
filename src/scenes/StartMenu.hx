@@ -14,19 +14,24 @@ import scenes.Scene;
 class StartMenu extends Scene
 {
 	
-	private var btnGraphics:CREDITBTN;
+	private var creditsbtnGraphics:CREDITBTN;
+	private var newgamebtnGraphics:NEWGAMEBTN;
+	private var scorebtnGraphics:SCOREBTN;
+	private var startmenubg:STARTMENUBG;
+	
 	
 	public function new () {
 		super();
-		
-		btnGraphics = new CREDITBTN();
-		addChild(btnGraphics);
-		/*m_test = new Sprite();
-		m_test.graphics.beginFill(0x000000);
-		m_test.graphics.drawRect(0, 0, 400, 200);
-		m_test.graphics.endFill();
-		m_test.buttonMode = true;
-		addChild(m_test);*/
+		startmenubg = new STARTMENUBG();
+		creditsbtnGraphics = new CREDITBTN();
+		newgamebtnGraphics = new NEWGAMEBTN();
+		scorebtnGraphics = new SCOREBTN();
+		addChild(startmenubg);
+		addChild(creditsbtnGraphics);
+		addChild(newgamebtnGraphics);
+		newgamebtnGraphics.y = 40;
+		addChild(scorebtnGraphics);
+		scorebtnGraphics.y = 80;
 	}
 	
 	override private function clickHandler (_event:MouseEvent) :Void {
@@ -34,6 +39,12 @@ class StartMenu extends Scene
 			//case m_test:
 				//trace("youpi");
 				//EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.credits }));
+			case scorebtnGraphics:
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.score } ));
+			case creditsbtnGraphics:
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.credits } ));
+			case newgamebtnGraphics:
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.charachoice } ));
 		}
 	}
 	
