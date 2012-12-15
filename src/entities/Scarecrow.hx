@@ -16,17 +16,22 @@ import scenes.Test;
 class Scarecrow extends Entity
 {
 	
-	public inline static var SHOOTING_INTERVAL:Int = 400;
 	public var playerOperated:Bool;
 	public var aim:Sprite;
 	private var m_clip:Sprite;
+	private var m_scene:Test;
 	private var test:Int;
 	private var lastShot:Float;
+	private var m_currentInterval:Float;
+	public inline static var SHOOTING_INTERVAL:Int = 300;
+	public inline static var SHOOTING_RANDOM:Float = 1;
+	public inline static var ROTATION_SPEED:Float = 4;
 	
-	public function new (_player:Bool = false) {
+	public function new (_scene:Test) {
 		super();
 		
-		playerOperated = _player;
+		m_scene = _scene;
+		playerOperated = (m_scene.mode == Test.MODE_SCARE);
 		
 		m_clip = new Sprite();
 		m_clip.graphics.beginFill(0x000000);
@@ -42,8 +47,9 @@ class Scarecrow extends Entity
 		addChild(aim);
 		
 		x = 300;
-		y = 500;
+		y = Game.BOTTOM_LINE;
 		lastShot = Date.now().getTime();
+		m_currentInterval = SHOOTING_INTERVAL + (Std.random(Std.int(SHOOTING_INTERVAL * SHOOTING_RANDOM)));
 		
 		if (playerOperated) {
 			KeyboardManager.setCallback(Keyboard.SPACE, shoot);
@@ -55,24 +61,24 @@ class Scarecrow extends Entity
 		
 		if (playerOperated) {
 			if (KeyboardManager.isDown(Keyboard.LEFT))
-				aim.rotation -= 3;
+				aim.rotation -= ROTATION_SPEED;
 			if (KeyboardManager.isDown(Keyboard.RIGHT))
-				aim.rotation += 3;
+				aim.rotation += ROTATION_SPEED;
 		}
 		else {
 			var _bird:Bird = cast(Game.instance.scene, Test).bird;
 			aim.rotation = getTargetRotation(_bird);
 		}
 		
-		if (!playerOperated && Date.now().getTime() - lastShot > SHOOTING_INTERVAL)
+		if (!playerOperated && Date.now().getTime() - lastShot > m_currentInterval)
 			shoot();
 	}
 	
 	public function shoot () :Void {
-		if (playerOperated && Date.now().getTime() - lastShot < SHOOTING_INTERVAL) {
+		if (playerOperated && Date.now().getTime() - lastShot < m_currentInterval)
 			return;
-		}
 		lastShot = Date.now().getTime();
+		m_currentInterval = SHOOTING_INTERVAL + (Std.random(Std.int(SHOOTING_INTERVAL * SHOOTING_RANDOM)));
 		EventManager.instance.dispatchEvent(new GameEvent(GameEvent.SCARE_SHOOT, {rotation:aim.rotation} ));
 	}
 	
@@ -93,7 +99,7 @@ class Scarecrow extends Entity
 			_int--;
 		}
 		_point.x = Math.min(Math.max(_point.x, 0), 900);
-		_point.y = Math.min(Math.max(_point.y, 0), 500);
+		_point.y = Math.min(Math.max(_point.y, 0), Game.BOTTOM_LINE);
 		return _point;
 	}
 	

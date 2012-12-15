@@ -34,7 +34,7 @@ class Corn extends Entity
 		
 		x += Math.cos(degToRad(rotation)) * m_speed;
 		y += Math.sin(degToRad(rotation)) * m_speed;
-		if (x < 0 || x > 900 || y < 0 || y > 500) {
+		if (x < 0 || x > 900 || y < 0 || y > Game.BOTTOM_LINE) {
 			EventManager.instance.dispatchEvent(new GameEvent(GameEvent.REMOVE_CORN, this));
 		}
 	}
