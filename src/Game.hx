@@ -9,6 +9,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import scenes.Credits;
 import scenes.Scene;
 import scenes.StartMenu;
 
@@ -28,9 +29,6 @@ class Game extends Sprite
 	
 	//static public var SO:SharedObject;
 	
-	private var canvas:Bitmap;// The display container
-	private var canvasData:BitmapData;
-	
 	private var scene:Scene;
 	
 	private var lastFrame:Float;// The last time the game was updated
@@ -45,8 +43,6 @@ class Game extends Sprite
 			SO.data.levels = new Array<Dynamic>();
 			SO.flush();
 		}*/
-		// Create the empty display data
-		canvasData = new BitmapData(Std.int(SIZE.width / SCALE), Std.int(SIZE.height / SCALE), false, 0xF2F9FF);
 		// Wait for the sprite to be added to the display list
 		addEventListener(Event.ADDED_TO_STAGE, init);
 	}
@@ -71,18 +67,12 @@ class Game extends Sprite
 	private function init (_event:Event) :Void {
 		removeEventListener(Event.ADDED_TO_STAGE, init);
 		
-		// Create the display container and scale it
-		canvas = new Bitmap(canvasData);
-		addChild(canvas);
-		
 		// Init scene
 		changeScene(GameScene.startMenu);
 		
 		// Start main loop
 		lastFrame = 0;
 		addEventListener(Event.ENTER_FRAME, enterFrameHandler);
-		// Click events
-		//stage.addEventListener(MouseEvent.CLICK, clickHandler);
 		// Game events
 		EventManager.instance.addEventListener(GameEvent.CHANGE_SCENE, gameEventHandler);
 	}
@@ -96,13 +86,20 @@ class Game extends Sprite
 	
 	private function changeScene (_scene:GameScene, ?_param:Dynamic) :Void {
 		// Destroy current scene
-		if (scene != null)	scene.destroy();
+		if (scene != null) {
+			removeChild(scene);
+			scene.destroy();
+		}
 		// Default scene
-		if (_scene == null)	_scene = GameScene.startMenu;
+		if (_scene == null) {
+			_scene = GameScene.startMenu;
+		}
 		// Create new scene
 		scene = switch (_scene) {
 			case GameScene.startMenu:	new StartMenu();
+			case GameScene.credits:		new Credits();
 		}
+		addChild(scene);
 		/*// TODO Play music (make music)
 		if (scene.theme != null)
 			playTheme(scene.theme);*/
@@ -110,12 +107,6 @@ class Game extends Sprite
 	
 	private function enterFrameHandler (_event:Event) :Void {
 		update();
-		// Check if it's time to update the game (a frame has passed)
-		if (Date.now().getTime() - lastFrame >= MS) {
-			lastFrame = Date.now().getTime();
-			// Call the draw function
-			draw();
-		}
 	}
 	
 	private function update () :Void {
@@ -124,20 +115,11 @@ class Game extends Sprite
 		//scene.update();
 	}
 	
-	private function draw () :Void {
-		// Reset the display data
-		canvasData.fillRect(canvasData.rect, 0xFFCCFF);
-		//canvasData.copyPixels(backgroundData, backgroundData.rect, new Point());
-		// Draw entities
-		for (_entity in scene.entities) {
-			canvasData.draw(_entity);
-		}
-	}
-	
 }
 
 enum GameScene {
 	startMenu;
+	credits;
 }
 
 
