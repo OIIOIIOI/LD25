@@ -68,8 +68,8 @@ class Game extends Sprite
 		removeEventListener(Event.ADDED_TO_STAGE, init);
 		
 		// Init scene
-		//changeScene(GameScene.startMenu);
-		changeScene(GameScene.test);
+		changeScene(GameScene.startMenu);
+		//changeScene(GameScene.test);
 		
 		// Start main loop
 		lastFrame = 0;
@@ -121,7 +121,7 @@ class Game extends Sprite
 enum GameScene {
 	startMenu;
 	credits;
-	test;
+	//test;
 }
 
 

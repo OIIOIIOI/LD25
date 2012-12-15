@@ -18,6 +18,9 @@ class StartMenu extends Scene
 	
 	public function new () {
 		super();
+		
+		btnGraphics = new CREDITBTN();
+		addChild(btnGraphics);
 		/*m_test = new Sprite();
 		m_test.graphics.beginFill(0x000000);
 		m_test.graphics.drawRect(0, 0, 400, 200);
@@ -28,9 +31,9 @@ class StartMenu extends Scene
 	
 	override private function clickHandler (_event:MouseEvent) :Void {
 		switch (_event.target) {
-			case m_test:
-				trace("youpi");
-				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.credits }));
+			//case m_test:
+				//trace("youpi");
+				//EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.credits }));
 		}
 	}
 	
