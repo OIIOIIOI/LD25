@@ -95,28 +95,23 @@ class Bird extends Entity
 			}
 			if (m_target != null) {
 				var _angle:Float = Math.atan2(m_target.y - y, m_target.x - x) * 180 / Math.PI;
-				_angle += 180;
+				if (scaleX == -1) _angle += 180;
 				if (Math.abs(_angle) > 180) {
 					if (_angle > 0)	_angle -= 360;
 					else			_angle += 360;
 				}
-				trace("CURRENT: " + rotation + " / TARGET: " + _angle);
-				
 				var _diff:Float = rotation - _angle;
-				trace(_diff);
-				
 				if (_diff > 0)
 					_diff = Math.min(_diff, ROTATION_SPEED);
 				else if (_diff < 0)
 					_diff = Math.max(_diff, -ROTATION_SPEED);
-				
 				rotation -= _diff;
 			}
 			if (Date.now().getTime() - m_lastShot > m_currentInterval)
 				shoot();
 		}
 		
-		/*// Avoid flying belly-up
+		// Avoid flying belly-up
 		if (rotation > 90) {
 			scaleX = -scaleX;
 			rotation += 180;
@@ -124,11 +119,11 @@ class Bird extends Entity
 		else if (rotation < -90) {
 			scaleX = -scaleX;
 			rotation -= 180;
-		}*/
+		}
 		
 		// Speed depending on rotation
-		//speed = MOVEMENT_SPEED + rotation / 90 * 3 * scaleX;
-		speed = MOVEMENT_SPEED;
+		speed = MOVEMENT_SPEED + rotation / 90 * 3 * scaleX;
+		//speed = MOVEMENT_SPEED;
 		speed = Math.max(speed, 5);
 		
 		// Update
