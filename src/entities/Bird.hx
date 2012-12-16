@@ -5,6 +5,7 @@ import entities.Poo;
 import entities.Seed;
 import events.EventManager;
 import events.GameEvent;
+import flash.display.Shape;
 import flash.display.Sprite;
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -38,6 +39,7 @@ class Bird extends Entity
 	public inline static var STATE_NESTED:String = "state_nested";
 	public inline static var STATE_FLYING:String = "state_flying";
 	public inline static var STATE_CARRYING:String = "state_carrying";
+	public inline static var STATE_HURT:String = "state_hurt";
 	public inline static var STATE_DONE:String = "state_done";
 	
 	public function new (_scene:Test) {
@@ -46,14 +48,18 @@ class Bird extends Entity
 		m_scene = _scene;
 		playerOperated = (m_scene.mode == Test.MODE_BIRD);
 		
-		hitbox = new Rectangle(-20, -10, 40, 20);
-		
 		m_clip = new BIRDMC();
 		addChild(m_clip);
 		
+		hitbox = new Rectangle(-5, -10, 30, 24);
+		var _hit:Shape = new Shape();
+		_hit.graphics.beginFill(0xFFFF00, 0.5);
+		_hit.graphics.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		_hit.graphics.endFill();
+		addChild(_hit);
+		
 		state = STATE_NESTED;
 		
-		//y = 250;
 		speed = MOVEMENT_SPEED;
 		m_vx = m_vy = 0;
 		m_lastShot = Date.now().getTime();
@@ -82,9 +88,9 @@ class Bird extends Entity
 		
 		// User control
 		if (playerOperated) {
-			if (KeyboardManager.isDown(Keyboard.LEFT))
+			if (KeyboardManager.isDown(Keyboard.LEFT) && state != STATE_HURT)
 				rotation -= ROTATION_SPEED;
-			if (KeyboardManager.isDown(Keyboard.RIGHT))
+			if (KeyboardManager.isDown(Keyboard.RIGHT) && state != STATE_HURT)
 				rotation += ROTATION_SPEED;
 		}
 		
@@ -132,18 +138,6 @@ class Bird extends Entity
 		x = Math.min(Math.max(x, 0), 900);
 		y = Math.min(Math.max(y, 0), Game.BOTTOM_LINE);
 		
-		// Collisions
-		/*hitbox.x = x - hitbox.width / 2;
-		hitbox.y = y - hitbox.height / 2;
-		for (_s in m_scene.seeds) {
-			_s.hitbox.x = _s.x - _s.hitbox.width / 2;
-			_s.hitbox.y = _s.y - _s.hitbox.height / 2;
-			//trace(hitbox + " / " + _s.hitbox);
-			if (hitbox.intersects(_s.hitbox)) {
-				trace("hit");
-			}
-		}*/
-		
 		// Target change
 		if (!playerOperated && m_target != null) {
 			if (Math.abs(x - m_target.x) < 5 && Math.abs(y - m_target.y) < 5) {
@@ -158,6 +152,19 @@ class Bird extends Entity
 	public var velocity (getVelocity, null):Point;
 	private function getVelocity () :Point {
 		return new Point(Math.cos(rotation * Math.PI / 180) * speed * scaleX, Math.sin(rotation * Math.PI / 180) * speed * scaleX);
+	}
+	
+	public function hurt () :Void {
+		if (state == STATE_HURT) return;
+		m_clip.gotoAndPlay("hurt");
+		state = STATE_HURT;
+		Timer.delay(hurtEnd, 1000);
+	}
+	
+	public function hurtEnd () :Void {
+		if (state == STATE_FLYING) return;
+		m_clip.gotoAndPlay("fly");
+		state = STATE_FLYING;
 	}
 	
 	public function shoot () :Void {
