@@ -3,9 +3,12 @@ package entities;
 import Bird;
 import events.EventManager;
 import events.GameEvent;
+import flash.display.Shape;
 import flash.display.Sprite;
 import flash.geom.Point;
+import flash.geom.Rectangle;
 import flash.ui.Keyboard;
+import haxe.Timer;
 import scenes.Test;
 
 /**
@@ -17,37 +20,43 @@ class Scarecrow extends Entity
 {
 	
 	public var playerOperated:Bool;
-	public var aim:Sprite;
-	private var m_clip:Sprite;
+	public var aim:AIMMC;
+	private var m_clip:SCARECROWMC;
 	private var m_scene:Test;
 	private var test:Int;
 	private var lastShot:Float;
 	private var m_currentInterval:Float;
+	private var m_state:String;
 	public inline static var SHOOTING_INTERVAL:Int = 300;
 	public inline static var SHOOTING_RANDOM:Float = 1;
 	public inline static var ROTATION_SPEED:Float = 4;
+	public inline static var STATE_IDLE:String = "state_idle";
+	public inline static var STATE_HURT:String = "state_hurt";
 	
 	public function new (_scene:Test) {
 		super();
 		
+		m_state = STATE_IDLE;
+		
 		m_scene = _scene;
 		playerOperated = (m_scene.mode == Test.MODE_SCARE);
 		
-		m_clip = new Sprite();
-		m_clip.graphics.beginFill(0x000000);
-		m_clip.graphics.drawRect(-40, -160, 80, 160);
-		m_clip.graphics.endFill();
+		m_clip = new SCARECROWMC();
 		addChild(m_clip);
 		
-		aim = new Sprite();
-		aim.graphics.beginFill(0xFF0000);
-		aim.graphics.drawRect(-1, -100, 2, 100);
-		aim.graphics.endFill();
-		aim.y = -120;
-		addChild(aim);
+		aim = new AIMMC();
+		aim.y = -180;
+		if (playerOperated) addChild(aim);
+		
+		hitbox = new Rectangle(-45, -230, 75, 60);
+		/*var _hit:Shape = new Shape();
+		_hit.graphics.beginFill(0xFFFF00, 0.5);
+		_hit.graphics.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		_hit.graphics.endFill();
+		addChild(_hit);*/
 		
 		x = 300;
-		y = Game.BOTTOM_LINE;
+		y = Game.BOTTOM_LINE - 10;
 		lastShot = Date.now().getTime();
 		m_currentInterval = SHOOTING_INTERVAL + (Std.random(Std.int(SHOOTING_INTERVAL * SHOOTING_RANDOM)));
 		
@@ -70,8 +79,21 @@ class Scarecrow extends Entity
 			aim.rotation = getTargetRotation(_bird);
 		}
 		
-		if (!playerOperated && Date.now().getTime() - lastShot > m_currentInterval)
+		if (!playerOperated && Date.now().getTime() - lastShot > m_currentInterval && m_state != STATE_HURT)
 			shoot();
+	}
+	
+	public function hurt () :Void {
+		if (m_state == STATE_HURT) return;
+		m_clip.gotoAndPlay(5);
+		m_state = STATE_HURT;
+		Timer.delay(hurtEnd, 2000);
+	}
+	
+	public function hurtEnd () :Void {
+		if (m_state == STATE_IDLE) return;
+		m_clip.gotoAndPlay(1);
+		m_state = STATE_IDLE;
 	}
 	
 	public function shoot () :Void {
@@ -79,7 +101,8 @@ class Scarecrow extends Entity
 			return;
 		lastShot = Date.now().getTime();
 		m_currentInterval = SHOOTING_INTERVAL + (Std.random(Std.int(SHOOTING_INTERVAL * SHOOTING_RANDOM)));
-		EventManager.instance.dispatchEvent(new GameEvent(GameEvent.SCARE_SHOOT, {rotation:aim.rotation} ));
+		EventManager.instance.dispatchEvent(new GameEvent(GameEvent.SCARE_SHOOT, { rotation:aim.rotation } ));
+		m_clip.gotoAndPlay(2);
 	}
 	
 	public function getTargetRotation (_bird:Bird) :Float {

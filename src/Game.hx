@@ -31,7 +31,7 @@ class Game extends Sprite
 	inline static public var SCALE:Int = 1;// Since the display is at pixel-level, specify how much to scale it
 	inline static public var FPS:UInt = 30;// How many times per second do we want the game to update
 	inline static public var MS:Float = 1000 / FPS;
-	inline static public var BOTTOM_LINE:Int = 480;
+	inline static public var BOTTOM_LINE:Int = 475;
 	
 	static public var SO:SharedObject;
 	static public var instance:Game;

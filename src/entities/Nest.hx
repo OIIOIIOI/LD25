@@ -9,19 +9,18 @@ import flash.display.Sprite;
 class Nest extends Entity
 {
 	
-	private var m_clip:Sprite;
+	private var m_clip:NESTMC;
 	
 	public function new () {
 		super();
 		
-		m_clip = new Sprite();
-		m_clip.graphics.beginFill(0x000000);
+		m_clip = new NESTMC();
+		/*m_clip.graphics.beginFill(0x000000);
 		m_clip.graphics.drawRect(0, 0, 80, 20);
-		m_clip.graphics.endFill();
+		m_clip.graphics.endFill();*/
 		addChild(m_clip);
 		
-		x = 900 - width;
-		y = 60;
+		x = 900;
 	}
 	
 }

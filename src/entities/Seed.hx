@@ -12,7 +12,7 @@ import scenes.Test;
 class Seed extends Entity
 {
 	
-	private var m_clip:Sprite;
+	private var m_clip:SEEDMC;
 	private var m_vy:Float;
 	private var m_state:Int;
 	
@@ -21,10 +21,7 @@ class Seed extends Entity
 		
 		hitbox = new Rectangle(-10, -10, 20, 20);
 		
-		m_clip = new Sprite();
-		m_clip.graphics.beginFill(0xFF00FF, 0.2);
-		m_clip.graphics.drawRect(-20, -20, 40, 40);
-		m_clip.graphics.endFill();
+		m_clip = new SEEDMC();
 		addChild(m_clip);
 		
 		m_vy = 0;

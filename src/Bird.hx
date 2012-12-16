@@ -9,6 +9,7 @@ import flash.display.Sprite;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.ui.Keyboard;
+import haxe.Timer;
 import scenes.Scene;
 import scenes.Test;
 
@@ -23,20 +24,21 @@ class Bird extends Entity
 	public var playerOperated:Bool;
 	public var speed:Float;
 	private var m_clip:Sprite;
+	private var m_graph:BIRDMC;
 	private var m_scene:Test;
 	private var m_vx:Float;
 	private var m_vy:Float;
 	private var m_target:Entity;
 	private var m_lastShot:Float;
 	private var m_currentInterval:Float;
-	private var m_state:Int;
+	private var m_state:String;
 	public inline static var SHOOTING_INTERVAL:Int = 400;
 	public inline static var SHOOTING_RANDOM:Float = 1;
 	public inline static var ROTATION_SPEED:Float = 3;
-	public inline static var STATE_NESTED:Int = 1;
-	public inline static var STATE_FLYING:Int = 2;
-	public inline static var STATE_CARRYING:Int = 3;
-	public inline static var STATE_DONE:Int = 4;
+	public inline static var STATE_NESTED:String = "state_nested";
+	public inline static var STATE_FLYING:String = "state_flying";
+	public inline static var STATE_CARRYING:String = "state_carrying";
+	public inline static var STATE_DONE:String = "state_done";
 	
 	public function new (_scene:Test) {
 		super();
@@ -46,16 +48,20 @@ class Bird extends Entity
 		
 		hitbox = new Rectangle(-20, -10, 40, 20);
 		
-		m_clip = new Sprite();
+		/*m_clip = new Sprite();
 		m_clip.graphics.beginFill(0x000000);
 		m_clip.graphics.drawRect(-20, -10, 40, 20);
 		m_clip.graphics.endFill();
 		m_clip.graphics.beginFill(0xFF0000);
 		m_clip.graphics.drawRect(10, -10, 10, 20);
 		m_clip.graphics.endFill();
-		addChild(m_clip);
+		addChild(m_clip);*/
 		
-		m_state = STATE_FLYING;
+		m_graph = new BIRDMC();
+		addChild(m_graph);
+		
+		m_state = STATE_NESTED;
+		
 		y = 250;
 		speed = 5;
 		m_vx = m_vy = 0;
@@ -67,8 +73,21 @@ class Bird extends Entity
 		}
 	}
 	
+	public function start () :Void {
+		if (m_state != STATE_NESTED) return;
+		m_graph.gotoAndStop(2);
+		Timer.delay(realStart, 1000);
+	}
+	
+	private function realStart () :Void {
+		m_state = STATE_FLYING;
+		m_graph.gotoAndPlay(3);
+	}
+	
 	override public function update () :Void {
 		super.update();
+		
+		if (m_state == STATE_NESTED) return;
 		
 		// User control
 		if (playerOperated) {
@@ -126,6 +145,7 @@ class Bird extends Entity
 	}
 	
 	public function shoot () :Void {
+		if (m_state != STATE_FLYING) return;
 		if (playerOperated && Date.now().getTime() - m_lastShot < m_currentInterval) {
 			return;
 		}

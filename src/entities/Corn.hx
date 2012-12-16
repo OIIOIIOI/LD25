@@ -11,17 +11,17 @@ import flash.display.Sprite;
 class Corn extends Entity
 {
 	
-	private var m_clip:Sprite;
+	//private var m_clip:POPCORNMC;
+	private var m_clip:STONEMC;
 	private var m_speed:Float;
 	private var m_state:Int;
 	
 	public function new (_rotation:Float) {
 		super();
 		
-		m_clip = new Sprite();
-		m_clip.graphics.beginFill(0x000000);
-		m_clip.graphics.drawRect(-4, -4, 8, 8);
-		m_clip.graphics.endFill();
+		//m_clip = new POPCORNMC();
+		m_clip = new STONEMC();
+		m_clip.gotoAndStop(Std.random(m_clip.totalFrames));
 		addChild(m_clip);
 		
 		rotation = _rotation;
