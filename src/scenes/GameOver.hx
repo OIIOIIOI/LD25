@@ -16,6 +16,7 @@ class GameOver extends Scene
 	private var changebtn :CHANGEBTN;
 	private var quitbtn :QUITBTN;
 	private var gameoverbg :GAMEOVERBG;
+	private var extrabtn :EXTRABTN;
 	
 	public function new() 
 	{
@@ -23,10 +24,17 @@ class GameOver extends Scene
 		changebtn = new CHANGEBTN();
 		quitbtn = new QUITBTN();
 		gameoverbg = new GAMEOVERBG();
+		extrabtn = new EXTRABTN();
 		addChild(gameoverbg);
 		addChild(changebtn);
+		changebtn.y = 420;
+		changebtn.x = 744;
 		addChild(quitbtn);
-		quitbtn.y = 40;
+		quitbtn.y = 420;
+		quitbtn.x = 30;
+		addChild(extrabtn);
+		extrabtn.y = 420;
+		extrabtn.x = 407;
 		ScoreManager.saveScore;
 	}
 	
