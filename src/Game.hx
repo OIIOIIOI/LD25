@@ -62,8 +62,8 @@ class Game extends Sprite
 		removeEventListener(Event.ADDED_TO_STAGE, init);
 		
 		// Init scene
-		changeScene(GameScene.startMenu);
-		//changeScene(GameScene.test);
+		//changeScene(GameScene.gameover);
+		changeScene(GameScene.test);
 		
 		// Start main loop
 		lastFrame = 0;
