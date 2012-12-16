@@ -121,8 +121,8 @@ class Bird extends Entity
 		speed = Math.max(speed, 5);
 		
 		// Update
-		x += Math.cos(rotation * Math.PI / 180) * speed * scaleX;
-		y += Math.sin(rotation * Math.PI / 180) * speed * scaleX;
+		x += velocity.x;
+		y += velocity.y;
 		x = Math.min(Math.max(x, 0), 900);
 		y = Math.min(Math.max(y, 0), Game.BOTTOM_LINE);
 		
@@ -147,6 +147,11 @@ class Bird extends Entity
 					m_target = null;
 			}
 		}
+	}
+	
+	public var velocity (getVelocity, null):Point;
+	private function getVelocity () :Point {
+		return new Point(Math.cos(rotation * Math.PI / 180) * speed * scaleX, Math.sin(rotation * Math.PI / 180) * speed * scaleX);
 	}
 	
 	public function shoot () :Void {

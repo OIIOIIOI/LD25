@@ -87,7 +87,7 @@ class Test extends Scene
 	private function gameEventHandler (_event:GameEvent) :Void {
 		switch (_event.type) {
 			case GameEvent.BIRD_SHOOT:
-				var _p:Poo = new Poo();
+				var _p:Poo = new Poo(bird.velocity);
 				_p.x = _event.data.x;
 				_p.y = _event.data.y;
 				addChild(_p);

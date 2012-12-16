@@ -4,6 +4,7 @@ import events.EventManager;
 import events.GameEvent;
 import flash.display.Shape;
 import flash.display.Sprite;
+import flash.geom.Point;
 import flash.geom.Rectangle;
 import scenes.Test;
 
@@ -16,10 +17,10 @@ class Poo extends Entity
 {
 	
 	private var m_clip:POO_SHOT;
-	private var m_vy:Float;
+	private var m_velocity:Point;
 	private var m_state:Int;
 	
-	public function new () {
+	public function new (_velocity:Point) {
 		super();
 		
 		m_clip = new POO_SHOT();
@@ -33,16 +34,19 @@ class Poo extends Entity
 		addChild(_hit);*/
 		
 		m_state = 0;
-		m_vy = 1;
+		m_velocity = _velocity;
+		m_velocity.y = Math.max(m_velocity.y, 3);
+		m_velocity.x = Math.max(Math.min(m_velocity.x, 5), -5);
 	}
 	
 	override public function update () :Void {
 		super.update();
 		
 		if (m_state == 0) {
-			m_vy *= 1.1;
-			m_vy = Math.min(Math.max(m_vy, 0), 8);
-			y += m_vy;
+			x += m_velocity.x;
+			m_velocity.y *= 1.1;
+			m_velocity.y = Math.min(Math.max(m_velocity.y, 0), 8);
+			y += m_velocity.y;
 			if (y > Game.BOTTOM_LINE) {
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.POO_LANDING, this));
 			}

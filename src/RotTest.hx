@@ -76,8 +76,8 @@ class RotTest extends Sprite
 		var _speed:Float = 5 + m_clip.rotation / 90 * 3 * m_clip.scaleX;
 		_speed = Math.max(_speed, 4);
 		
-		m_clip.x += Math.cos(m_clip.rotation * Math.PI / 180) * _speed * m_clip.scaleX;
-		m_clip.y += Math.sin(m_clip.rotation * Math.PI / 180) * _speed * m_clip.scaleX;
+		//m_clip.x += Math.cos(m_clip.rotation * Math.PI / 180) * _speed * m_clip.scaleX;
+		//m_clip.y += Math.sin(m_clip.rotation * Math.PI / 180) * _speed * m_clip.scaleX;
 		
 		m_tf.text = m_clip.rotation + " / " + m_clip.scaleX + " / " + _speed;
 	}
