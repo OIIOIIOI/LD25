@@ -35,8 +35,8 @@
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>
-    <asset path="res\library.swf" />
     <asset path="res\soundLibrary.swf" />
+    <asset path="res\library.swf" />
   </library>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>

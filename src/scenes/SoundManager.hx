@@ -26,25 +26,19 @@ class SoundManager
 		var fadetimer :Timer;
 		var currentvolume :Float;
 		currentvolume = soundchannel.soundTransform.volume;
-		trace("startfade"+currentvolume);
 		fadetimer = new Timer(duration / 20);
 		function fadestep(te:TimerEvent):Void {
-			trace("step");
 			if (inOut == true) {
 				currentvolume += 0.05;
-				trace(currentvolume);
 				soundchannel.soundTransform = new SoundTransform(currentvolume);
 				if (currentvolume >= 1) {
 					fadetimer.stop();
-					trace("endfade");
 				}
 			}else {
 				currentvolume -= 0.05;
-				trace(currentvolume);
 				soundchannel.soundTransform = new SoundTransform(currentvolume);
 				if (currentvolume <= 0) {
 					fadetimer.stop();
-					trace("endfade");
 				}
 			}
 		}
