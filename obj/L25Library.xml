@@ -6,8 +6,8 @@
   <frame>
     <library>
       <clip id="Sharepoint__" />
-      <clip id="res.soundLibrary.swf" name="res.soundLibrary.swf" import="res\soundLibrary.swf" size="526" modified="16/12/2012 15:48:49" />
-      <clip id="res.library.swf" name="res.library.swf" import="res\library.swf" size="727531" modified="16/12/2012 16:50:55" />
+      <clip id="res.soundLibrary.swf" name="res.soundLibrary.swf" import="res\soundLibrary.swf" size="526" modified="16/12/2012 14:05:29" />
+      <clip id="res.library.swf" name="res.library.swf" import="res\library.swf" size="769645" modified="16/12/2012 17:44:36" />
     </library>
   </frame>
 </movie>

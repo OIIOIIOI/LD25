@@ -13,18 +13,18 @@ import Game;
 
 class GameOver extends Scene
 {
-	private var continuebtn :CONTINUEBTN;
+	private var changebtn :CHANGEBTN;
 	private var quitbtn :QUITBTN;
 	private var gameoverbg :GAMEOVERBG;
 	
 	public function new() 
 	{
 		super();
-		continuebtn = new CONTINUEBTN();
+		changebtn = new CHANGEBTN();
 		quitbtn = new QUITBTN();
 		gameoverbg = new GAMEOVERBG();
 		addChild(gameoverbg);
-		addChild(continuebtn);
+		addChild(changebtn);
 		addChild(quitbtn);
 		quitbtn.y = 40;
 		ScoreManager.saveScore;
@@ -34,6 +34,8 @@ class GameOver extends Scene
 		switch (_event.target) {
 			case quitbtn:
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.startMenu } ));
+			case changebtn:
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.charachoice } ));
 		}
 	}
 }
