@@ -19,8 +19,6 @@ class Nest extends Entity
 		m_clip.graphics.drawRect(0, 0, 80, 20);
 		m_clip.graphics.endFill();*/
 		addChild(m_clip);
-		
-		x = 900;
 	}
 	
 }

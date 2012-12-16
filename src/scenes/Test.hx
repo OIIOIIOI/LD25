@@ -9,6 +9,7 @@ import entities.Scarecrow;
 import entities.Seed;
 import events.EventManager;
 import events.GameEvent;
+import flash.geom.Point;
 import flash.geom.Rectangle;
 import haxe.Timer;
 import scenes.Scene;
@@ -29,6 +30,7 @@ class Test extends Scene
 	public var scarecrow:Scarecrow;
 	public var seeds:Array<Seed>;
 	public var nest:Nest;
+	private var m_bushes:BUSHES;
 	private var m_started:Bool;
 	
 	public function new (_mode:String) {
@@ -56,22 +58,22 @@ class Test extends Scene
 		}
 		
 		nest = new Nest();
+		nest.x = 900 - 128;
+		nest.y = 120;
 		addChild(nest);
 		
 		bird = new Bird(this);
+		bird.x = nest.x;
+		bird.y = nest.y;
+		bird.scaleX = -1;
 		addChild(bird);
 		m_entities.push(bird);
 		
-		var _bushes:BUSHES = new BUSHES();
-		_bushes.y = 500;
-		addChild(_bushes);
+		m_bushes = new BUSHES();
+		m_bushes.y = 500;
+		addChild(m_bushes);
 		
-		Timer.delay(start, 2000);
-		/*EventManager.instance.addEventListener(GameEvent.BIRD_SHOOT, gameEventHandler);
-		EventManager.instance.addEventListener(GameEvent.SCARE_SHOOT, gameEventHandler);
-		EventManager.instance.addEventListener(GameEvent.POO_LANDING, gameEventHandler);
-		EventManager.instance.addEventListener(GameEvent.REMOVE_POO, gameEventHandler);
-		EventManager.instance.addEventListener(GameEvent.REMOVE_CORN, gameEventHandler);*/
+		Timer.delay(start, 100);
 	}
 	
 	private function start () :Void {
@@ -92,12 +94,14 @@ class Test extends Scene
 				_p.y = _event.data.y;
 				addChild(_p);
 				m_entities.push(_p);
+				addChild(m_bushes);// Put the bushes in front of the rest again
 			case GameEvent.SCARE_SHOOT:
 				var _p:Corn = new Corn(scarecrow.aim.rotation - 90);
 				_p.x = scarecrow.x + scarecrow.aim.x;
 				_p.y = scarecrow.y + scarecrow.aim.y;
 				addChild(_p);
 				m_entities.push(_p);
+				addChild(m_bushes);// Put the bushes in front of the rest again
 			case GameEvent.POO_LANDING:
 				var _q:Poodle = new Poodle();
 				_q.x = _event.data.x;
@@ -106,6 +110,7 @@ class Test extends Scene
 				m_entities.push(_q);
 				m_entities.remove(_event.data);
 				removeChild(_event.data);
+				addChild(m_bushes);// Put the bushes in front of the rest again
 			case GameEvent.REMOVE_POO:
 				m_entities.remove(_event.data);
 				removeChild(_event.data);

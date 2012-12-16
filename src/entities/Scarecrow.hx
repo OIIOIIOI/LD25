@@ -117,8 +117,8 @@ class Scarecrow extends Entity
 	public function predictPosition (_bird:Bird, _int:Int = 0) :Point {
 		var _point:Point = new Point(_bird.x, _bird.y);
 		while (_int > 0) {
-			_point.x += Math.cos(degToRad(_bird.rotation)) * _bird.speed;
-			_point.y += Math.sin(degToRad(_bird.rotation)) * _bird.speed;
+			_point.x += _bird.velocity.x;
+			_point.y += _bird.velocity.y;
 			_int--;
 		}
 		_point.x = Math.min(Math.max(_point.x, 0), 900);
