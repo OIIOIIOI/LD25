@@ -19,11 +19,11 @@ class StartMenu extends Scene
 	private var newgamebtnGraphics:NEWGAMEBTN;
 	private var scorebtnGraphics:SCOREBTN;
 	private var startmenubg:STARTMENUBG;
-	private var yaychannel:SoundChannel;
+	//private var yaychannel:SoundChannel;
 	
 	public function new () {
 		super();
-		yaychannel = SoundManager.play("YAY");
+		//yaychannel = SoundManager.play("YAY");
 		startmenubg = new STARTMENUBG();
 		creditsbtnGraphics = new CREDITBTN();
 		newgamebtnGraphics = new NEWGAMEBTN();
@@ -47,7 +47,7 @@ class StartMenu extends Scene
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.credits } ));
 			case newgamebtnGraphics:
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.charachoice } ));
-				SoundManager.fade(yaychannel, 5000, false);
+				//SoundManager.fade(yaychannel, 5000, false);
 		}
 	}
 	
