@@ -23,8 +23,7 @@ class Bird extends Entity
 	
 	public var playerOperated:Bool;
 	public var speed:Float;
-	private var m_clip:Sprite;
-	private var m_graph:BIRDMC;
+	private var m_clip:BIRDMC;
 	private var m_scene:Test;
 	private var m_vx:Float;
 	private var m_vy:Float;
@@ -35,6 +34,7 @@ class Bird extends Entity
 	public inline static var SHOOTING_INTERVAL:Int = 400;
 	public inline static var SHOOTING_RANDOM:Float = 1;
 	public inline static var ROTATION_SPEED:Float = 3;
+	public inline static var MOVEMENT_SPEED:Float = 6;
 	public inline static var STATE_NESTED:String = "state_nested";
 	public inline static var STATE_FLYING:String = "state_flying";
 	public inline static var STATE_CARRYING:String = "state_carrying";
@@ -48,22 +48,13 @@ class Bird extends Entity
 		
 		hitbox = new Rectangle(-20, -10, 40, 20);
 		
-		/*m_clip = new Sprite();
-		m_clip.graphics.beginFill(0x000000);
-		m_clip.graphics.drawRect(-20, -10, 40, 20);
-		m_clip.graphics.endFill();
-		m_clip.graphics.beginFill(0xFF0000);
-		m_clip.graphics.drawRect(10, -10, 10, 20);
-		m_clip.graphics.endFill();
-		addChild(m_clip);*/
-		
-		m_graph = new BIRDMC();
-		addChild(m_graph);
+		m_clip = new BIRDMC();
+		addChild(m_clip);
 		
 		m_state = STATE_NESTED;
 		
 		y = 250;
-		speed = 5;
+		speed = MOVEMENT_SPEED;
 		m_vx = m_vy = 0;
 		m_lastShot = Date.now().getTime();
 		m_currentInterval = SHOOTING_INTERVAL + (Std.random(Std.int(SHOOTING_INTERVAL * SHOOTING_RANDOM)));
@@ -75,13 +66,13 @@ class Bird extends Entity
 	
 	public function start () :Void {
 		if (m_state != STATE_NESTED) return;
-		m_graph.gotoAndStop(2);
+		m_clip.gotoAndStop(2);
 		Timer.delay(realStart, 1000);
 	}
 	
 	private function realStart () :Void {
 		m_state = STATE_FLYING;
-		m_graph.gotoAndPlay(3);
+		m_clip.gotoAndPlay(3);
 	}
 	
 	override public function update () :Void {
@@ -115,10 +106,24 @@ class Bird extends Entity
 				shoot();
 		}
 		
+		// Avoid flying belly-up
+		if (rotation > 90) {
+			scaleX = -scaleX;
+			rotation += 180;
+		}
+		else if (rotation < -90) {
+			scaleX = -scaleX;
+			rotation -= 180;
+		}
+		
+		// Speed depending on rotation
+		speed = MOVEMENT_SPEED + rotation / 90 * 3 * scaleX;
+		speed = Math.max(speed, 5);
+		
 		// Update
-		x += Math.cos(degToRad(rotation)) * speed;
+		x += Math.cos(rotation * Math.PI / 180) * speed * scaleX;
+		y += Math.sin(rotation * Math.PI / 180) * speed * scaleX;
 		x = Math.min(Math.max(x, 0), 900);
-		y += Math.sin(degToRad(rotation)) * speed;
 		y = Math.min(Math.max(y, 0), Game.BOTTOM_LINE);
 		
 		// Collisions
@@ -152,10 +157,6 @@ class Bird extends Entity
 		m_lastShot = Date.now().getTime();
 		m_currentInterval = SHOOTING_INTERVAL + (Std.random(Std.int(SHOOTING_INTERVAL * SHOOTING_RANDOM)));
 		EventManager.instance.dispatchEvent(new GameEvent(GameEvent.BIRD_SHOOT, {x:x, y:y} ));
-	}
-	
-	public function degToRad(_deg:Float) :Float {
-		return _deg * Math.PI / 180;
 	}
 	
 }

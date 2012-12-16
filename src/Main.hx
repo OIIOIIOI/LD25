@@ -23,6 +23,7 @@ class Main
 		KeyboardManager.init(Lib.current.stage);
 		// Create and add game
 		Lib.current.stage.addChild(new Game());
+		//Lib.current.stage.addChild(new RotTest());
 	}
 	
 }
