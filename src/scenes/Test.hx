@@ -50,7 +50,7 @@ class Test extends Scene
 		var _seed:Seed;
 		for (_i in 0...3) {
 			_seed = new Seed();
-			_seed.x = Std.random(640) + 100;
+			_seed.x = Std.random(200) + 80 + _i * 235;
 			_seed.y = Game.BOTTOM_LINE;
 			addChild(_seed);
 			m_entities.push(_seed);
@@ -73,7 +73,7 @@ class Test extends Scene
 		m_bushes.y = 500;
 		addChild(m_bushes);
 		
-		Timer.delay(start, 100);
+		Timer.delay(start, 2000);
 	}
 	
 	private function start () :Void {
