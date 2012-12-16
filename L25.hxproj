@@ -5,7 +5,7 @@
     <movie outputType="Application" />
     <movie input="" />
     <movie path="bin\L25.swf" />
-    <movie fps="60" />
+    <movie fps="48" />
     <movie width="900" />
     <movie height="500" />
     <movie version="10" />

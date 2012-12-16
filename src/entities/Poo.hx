@@ -45,7 +45,7 @@ class Poo extends Entity
 		if (m_state == 0) {
 			x += m_velocity.x;
 			m_velocity.y *= 1.1;
-			m_velocity.y = Math.min(Math.max(m_velocity.y, 0), 8);
+			m_velocity.y = Math.min(Math.max(m_velocity.y, 0), 10);
 			y += m_velocity.y;
 			if (y > Game.BOTTOM_LINE) {
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.POO_LANDING, this));

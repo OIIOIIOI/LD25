@@ -1,5 +1,6 @@
 package scenes;
 
+import entities.Bird;
 import entities.Corn;
 import entities.Entity;
 import entities.Nest;
@@ -9,6 +10,8 @@ import entities.Scarecrow;
 import entities.Seed;
 import events.EventManager;
 import events.GameEvent;
+import flash.display.BlendMode;
+import flash.display.Sprite;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import haxe.Timer;
@@ -30,6 +33,7 @@ class Test extends Scene
 	public var scarecrow:Scarecrow;
 	public var seeds:Array<Seed>;
 	public var nest:Nest;
+	private var m_container:Sprite;
 	private var m_bushes:BUSHES;
 	private var m_started:Bool;
 	
@@ -38,6 +42,9 @@ class Test extends Scene
 		
 		mode = _mode;
 		m_started = false;
+		
+		var _sky:Sprite = (true) ? new DAYLIGHTBG() : new NIGHTLIGHTBG();
+		addChild(_sky);
 		
 		var _background:GAMEBG = new GAMEBG();
 		addChild(_background);
@@ -69,9 +76,21 @@ class Test extends Scene
 		addChild(bird);
 		m_entities.push(bird);
 		
+		m_container = new Sprite();
+		addChild(m_container);
+		
 		m_bushes = new BUSHES();
 		m_bushes.y = 500;
 		addChild(m_bushes);
+		
+		if (!true) {
+			var _nightFilter:Sprite = new Sprite();
+			_nightFilter.graphics.beginFill(0x486985);
+			_nightFilter.graphics.drawRect(0, 0, 900, 500);
+			_nightFilter.graphics.endFill();
+			_nightFilter.blendMode = BlendMode.MULTIPLY;
+			addChild(_nightFilter);
+		}
 		
 		Timer.delay(start, 2000);
 	}
@@ -92,31 +111,28 @@ class Test extends Scene
 				var _p:Poo = new Poo(bird.velocity);
 				_p.x = _event.data.x;
 				_p.y = _event.data.y;
-				addChild(_p);
+				m_container.addChild(_p);
 				m_entities.push(_p);
-				addChild(m_bushes);// Put the bushes in front of the rest again
 			case GameEvent.SCARE_SHOOT:
 				var _p:Corn = new Corn(scarecrow.aim.rotation - 90);
 				_p.x = scarecrow.x + scarecrow.aim.x;
 				_p.y = scarecrow.y + scarecrow.aim.y;
-				addChild(_p);
+				m_container.addChild(_p);
 				m_entities.push(_p);
-				addChild(m_bushes);// Put the bushes in front of the rest again
 			case GameEvent.POO_LANDING:
 				var _q:Poodle = new Poodle();
 				_q.x = _event.data.x;
 				_q.y = _event.data.y;
-				addChild(_q);
+				m_container.addChild(_q);
 				m_entities.push(_q);
 				m_entities.remove(_event.data);
-				removeChild(_event.data);
-				addChild(m_bushes);// Put the bushes in front of the rest again
+				m_container.removeChild(_event.data);
 			case GameEvent.REMOVE_POO:
 				m_entities.remove(_event.data);
-				removeChild(_event.data);
+				m_container.removeChild(_event.data);
 			case GameEvent.REMOVE_CORN:
 				m_entities.remove(_event.data);
-				removeChild(_event.data);
+				m_container.removeChild(_event.data);
 		}
 	}
 	
@@ -143,7 +159,7 @@ class Test extends Scene
 		}
 		for (_p in _toKill) {
 			m_entities.remove(_p);
-			removeChild(_p);
+			m_container.removeChild(_p);
 		}
 		_toKill = null;
 	}
