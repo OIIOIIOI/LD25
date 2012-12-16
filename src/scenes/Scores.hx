@@ -5,6 +5,7 @@ import events.GameEvent;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.text.TextField;
+import flash.text.TextFormat;
 import Game;
 
 /**
@@ -24,6 +25,9 @@ class Scores extends Scene
 		scorebg = new SCOREBG();
 		backbtn =  new BACKBTN();
 		scoreDisplay = new TextField();
+		
+		var scoreformat = new TextFormat();
+		scoreformat.font = "True Crimes";
 		addChild(scorebg);
 		addChild(backbtn);
 		addChild(scoreDisplay);
@@ -31,6 +35,8 @@ class Scores extends Scene
 		scoreDisplay.y = 100;
 		scoreDisplay.width = 300;
 		scoreDisplay.height = 300;
+		scoreDisplay.embedFonts = true;
+		scoreDisplay.defaultTextFormat=scoreformat;
 		for (i in ScoreManager.scoreBoard) {
 			scoreDisplay.text += "" + i.name + "     " + i.score+"\n";
 		}
