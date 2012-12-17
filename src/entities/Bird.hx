@@ -72,6 +72,7 @@ class Bird extends Entity
 		m_clip.gotoAndStop(2);
 		if (playerOperated) SoundManager.play("BIRD_CRY_SND");
 		Timer.delay(realStart, 1000);
+		m_scene.goTF.text = "GO!";
 	}
 	
 	private function realStart () :Void {
@@ -81,6 +82,7 @@ class Bird extends Entity
 		if (playerOperated) {
 			KeyboardManager.setCallback(Keyboard.SPACE, shoot);
 		}
+		m_scene.removeChild(m_scene.goTF);
 	}
 	
 	override public function update () :Void {
@@ -101,7 +103,7 @@ class Bird extends Entity
 			if (target == null) {
 				if (state == STATE_CARRYING) {
 					target = m_scene.nest;
-					trace("nest + " + seed);
+					trace("target nest (" + seed + ")");
 					//seed = null;
 				}
 				else if (m_scene.seeds != null) {
@@ -115,12 +117,12 @@ class Bird extends Entity
 					if (_temp.length > 0) {
 						seed = _temp[Std.random(_temp.length)];
 						target = seed;
-						trace("chose " + seed);
+						trace("target seed " + seed);
 					}
 					else {
 						target = m_scene.nest;
 						seed = null;
-						trace("nest + " + seed);
+						trace("target nest (" + seed + ")");
 					}
 				}
 			}
@@ -172,7 +174,9 @@ class Bird extends Entity
 	}
 	
 	public function hurt () :Void {
+		trace("---- HURT");
 		if (state == STATE_HURT) return;
+		trace("bird hurt");
 		m_clip.body.gotoAndStop("hurt");
 		//state = STATE_HURT;
 		SoundManager.play("BIRD_HURT_" + Std.random(3) + "_SND");
@@ -186,6 +190,7 @@ class Bird extends Entity
 	}
 	
 	public function grab (_seed:Seed) :Void {
+		trace("---- GRAB");
 		if (state == STATE_CARRYING) return;
 		m_clip.body.gotoAndStop("carry");
 		state = STATE_CARRYING;
@@ -197,14 +202,20 @@ class Bird extends Entity
 	}
 	
 	public function unload (_nest:Bool = false) :Void {
+		trace("---- UNLOAD");
 		if (state != STATE_CARRYING) return;
 		trace("unload: " + _nest);
 		m_clip.body.gotoAndStop("fly");
 		state = STATE_FLYING;
 		if (_nest) {
+			trace("nest -> no target no seed");
 			target = null;
+			seed = null;
 		}
-		seed = null;
+		else {
+			trace("mid-air -> target = seed " + seed);
+			target = seed;
+		}
 	}
 	
 	public function shoot () :Void {

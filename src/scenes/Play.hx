@@ -14,6 +14,10 @@ import flash.display.BlendMode;
 import flash.display.Sprite;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.text.AntiAliasType;
+import flash.text.TextField;
+import flash.text.TextFormat;
+import flash.text.TextFormatAlign;
 import haxe.Timer;
 import scenes.Scene;
 
@@ -33,6 +37,7 @@ class Play extends Scene
 	public var scarecrow:Scarecrow;
 	public var seeds:Array<Seed>;
 	public var nest:Nest;
+	public var goTF:TextField;
 	private var m_container:Sprite;
 	private var m_seedsContainer:Sprite;
 	private var m_bushes:BUSHES;
@@ -96,6 +101,22 @@ class Play extends Scene
 			_nightFilter.blendMode = BlendMode.MULTIPLY;
 			addChild(_nightFilter);
 		}
+		
+		var _format:TextFormat = new TextFormat("TrashHand", 60, 0x000000);
+		//var _format:TextFormat = new TextFormat("TrueCrimes", 24, 0x000000);
+		_format.align = TextFormatAlign.CENTER;
+		
+		goTF = new TextField();
+		goTF.embedFonts = true;
+		goTF.antiAliasType = AntiAliasType.ADVANCED;
+		goTF.defaultTextFormat = _format;
+		goTF.selectable = false;
+		goTF.text = "READY?";
+		goTF.width = 400;
+		goTF.height = 200;
+		goTF.x = 450 - goTF.width / 2;
+		goTF.y = 200;
+		addChild(goTF);
 		
 		Timer.delay(start, 2000);
 	}
@@ -204,14 +225,16 @@ class Play extends Scene
 						var _seed:Seed = bird.seed;
 						_seed.x = bird.x;
 						_seed.y = Math.min(bird.y + 40, Game.BOTTOM_LINE - 50);
-						//trace(bird.x + " / " + bird.y);
+						trace("shot carrying");
 						bird.unload();
 						m_seedsContainer.addChild(_seed);
 						m_entities.push(_seed);
 						//seeds.push(_seed);
 					}
-					else
+					else {
+						trace("real shot");
 						bird.hurt();
+					}
 				}
 			}
 		}
