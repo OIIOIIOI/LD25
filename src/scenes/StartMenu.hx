@@ -28,10 +28,14 @@ class StartMenu extends Scene
 		scorebtnGraphics = new SCOREBTN();
 		addChild(startmenubg);
 		addChild(creditsbtnGraphics);
+		creditsbtnGraphics.y = 455;
+		creditsbtnGraphics.x = 360;
 		addChild(newgamebtnGraphics);
-		newgamebtnGraphics.y = 40;
+		newgamebtnGraphics.y = 380;
+		newgamebtnGraphics.x = 360;
 		addChild(scorebtnGraphics);
-		scorebtnGraphics.y = 80;
+		scorebtnGraphics.y = 455;
+		scorebtnGraphics.x = 460;
 	}
 	
 	override private function clickHandler (_event:MouseEvent) :Void {
@@ -44,7 +48,9 @@ class StartMenu extends Scene
 			case creditsbtnGraphics:
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.credits } ));
 			case newgamebtnGraphics:
-				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.charachoice } ));
+				creditsbtnGraphics.visible = false;
+				scorebtnGraphics.visible = false;
+				newgamebtnGraphics.visible = false;
 		}
 	}
 	
