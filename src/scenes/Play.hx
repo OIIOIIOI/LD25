@@ -71,7 +71,7 @@ class Play extends Scene
 		for (_i in 0...3) {
 			_seed = new Seed();
 			_seed.x = Std.random(200) + 80 + _i * 235;
-			_seed.y = Game.BOTTOM_LINE - 50;
+			_seed.y = Game.BOTTOM_LINE;
 			m_seedsContainer.addChild(_seed);
 			m_entities.push(_seed);
 			seeds.push(_seed);
@@ -124,6 +124,7 @@ class Play extends Scene
 		addChild(goTF);
 		
 		var _track:String = (DAY) ? "DAY_MUSIC" : "NIGHT_MUSIC";
+		
 		m_channel = SoundManager.play(_track, 0, 0.7);
 		
 		Timer.delay(start, 2000);

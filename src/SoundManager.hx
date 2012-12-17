@@ -22,8 +22,11 @@ class SoundManager
 		if (_resolvedClass == null) return null;
 		var sound:Sound = Type.createInstance(_resolvedClass, []);
 		if (sound == null) return null;
-		var soundtransform:SoundTransform = new SoundTransform(vol,balance);
-		return sound.play(0, loop, soundtransform);
+		var soundtransform:SoundTransform = new SoundTransform(vol, balance);
+		if (Soundclass == "CLICK_SND")
+			return sound.play(100, loop, soundtransform);
+		else
+			return sound.play(0, loop, soundtransform);
 	}
 	
 	public static function stop(soundchannel:SoundChannel):Void {

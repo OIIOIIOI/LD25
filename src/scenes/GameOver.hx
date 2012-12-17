@@ -18,7 +18,7 @@ class GameOver extends Scene
 	private var gameoverbg :GAMEOVERBG;
 	private var extrabtn :EXTRABTN;
 	
-	public function new() 
+	public function new()
 	{
 		super();
 		changebtn = new CHANGEBTN();
@@ -41,8 +41,10 @@ class GameOver extends Scene
 	override private function clickHandler (_event:MouseEvent) :Void {
 		switch (_event.target) {
 			case quitbtn:
+				SoundManager.play("CLICK_SND", 0, 2);
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.startMenu } ));
 			case changebtn:
+				SoundManager.play("CLICK_SND", 0, 2);
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.charachoice } ));
 		}
 	}

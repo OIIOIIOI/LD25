@@ -77,10 +77,17 @@ class CharaChoice extends Scene
 	override private function clickHandler (_event:MouseEvent) :Void {
 		switch (_event.target) {
 			case backbtn:
+				SoundManager.play("CLICK_SND", 0, 2);
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.startMenu } ));
 			case scareselecbtn:
+				SoundManager.play("CLICK_SND", 0, 2);
+				StartMenu.menutheme.stop();
+				StartMenu.menuthemeisplaying = false;
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.play, param:Play.MODE_SCARE } ));
 			case birdselecbtn:
+				SoundManager.play("CLICK_SND", 0, 2);
+				StartMenu.menutheme.stop();
+				StartMenu.menuthemeisplaying = false;
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.play } ));
 		}
 	}
