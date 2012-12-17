@@ -23,7 +23,6 @@ class Scarecrow extends Entity
 	public var aim:AIMMC;
 	private var m_clip:SCARECROWMC;
 	private var m_scene:Play;
-	private var test:Int;
 	private var lastShot:Float;
 	private var m_currentInterval:Float;
 	private var m_state:String;

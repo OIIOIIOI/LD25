@@ -232,7 +232,7 @@ class Play extends Scene
 						//seeds.push(_seed);
 					}
 					else {
-						trace("real shot");
+						trace("real shot (" + bird.state + ")");
 						bird.hurt();
 					}
 				}
