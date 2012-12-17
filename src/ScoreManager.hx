@@ -30,7 +30,7 @@ class ScoreManager
 	}
 	
 	public static function initScoreData (data:Array<Dynamic>):Void {
-		scoreBoard = data;
+		scoreBoard = data.concat([]);
 	}
 	
 	public static function saveScore (playerName:String):Void {

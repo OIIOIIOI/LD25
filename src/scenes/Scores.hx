@@ -41,7 +41,6 @@ class Scores extends Scene
 		scoreDisplay.selectable = false;
 		scoreDisplay.antiAliasType = AntiAliasType.ADVANCED;
 		scoreDisplay.defaultTextFormat = scoreformat;
-		scoreDisplay.text = "dfghjklmiuytr\n";
 		for (i in ScoreManager.scoreBoard) {
 			scoreDisplay.text += "" + i.name + "     " + i.score+"\n";
 		}
