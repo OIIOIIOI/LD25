@@ -21,6 +21,7 @@ import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import haxe.Timer;
 import scenes.Scene;
+import Game;
 
 /**
  * ...
@@ -48,6 +49,8 @@ class Play extends Scene
 	
 	public function new (_mode:String) {
 		super();
+		
+		ScoreManager.resetGame();
 		
 		mode = _mode;
 		m_started = false;
@@ -181,20 +184,29 @@ class Play extends Scene
 	}
 	
 	private function endGame (_victory:Bool) :Void {
-		Timer.delay(callback(playJingle, _victory), 1500);
+		var _scarecrow:Bool = false;
 		if (_victory) {
-			if (mode == MODE_SCARE)	SoundManager.play("BIRD_DIE_SND");
-			else					SoundManager.play("SC_DIE_SND");
+			if (mode == MODE_SCARE) {
+				SoundManager.play("BIRD_DIE_SND");
+				_scarecrow = true;
+			} else {
+				SoundManager.play("SC_DIE_SND");
+				_scarecrow = false;
+			}
 		} else {
-			if (mode == MODE_SCARE)	SoundManager.play("SC_DIE_SND");
-			else					SoundManager.play("BIRD_DIE_SND");
+			if (mode == MODE_SCARE) {
+				SoundManager.play("SC_DIE_SND");
+				_scarecrow = true;
+			} else {
+				SoundManager.play("BIRD_DIE_SND");
+				_scarecrow = false;
+			}
 		}
+		Timer.delay(callback(showGameOver, [_victory, _scarecrow]), 1500);
 	}
 	
-	private function playJingle (_victory:Bool) :Void {
-		SoundManager.play((_victory) ? "WIN_SND" : "FAIL_SND");
-		goTF.text = (_victory) ? "VICTORY" : "DEFEAT";
-		addChild(goTF);
+	private function showGameOver (_params:Array<Bool>) :Void {
+		EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.gameover, param:_params } ));
 	}
 	
 	override public function update () :Void {
@@ -278,8 +290,8 @@ class Play extends Scene
 		// Remove obsolete entities
 		for (_p in _toKill) {
 			m_entities.remove(_p);
-			_p.parent.removeChild(_p);
-			//m_container.removeChild(_p);
+			if (_p.parent != null)
+				_p.parent.removeChild(_p);
 		}
 		_toKill = null;
 	}

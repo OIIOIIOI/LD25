@@ -93,11 +93,11 @@ class Game extends Sprite
 		scene = switch (_scene) {
 			case GameScene.startMenu:	new StartMenu();
 			case GameScene.credits:		new Credits();
-			case GameScene.gameover:	new GameOver();
+			case GameScene.gameover:	new GameOver(_param);
 			case GameScene.score:		new Scores();
 			case GameScene.charachoice:	new CharaChoice();
 			case GameScene.play:
-				if (_param == null) _param = Play.MODE_SCARE;
+				if (_param == null) _param = Play.MODE_BIRD;
 				new Play(_param);
 		}
 		addChild(scene);
