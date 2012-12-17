@@ -118,6 +118,8 @@ class Play extends Scene
 		goTF.y = 200;
 		addChild(goTF);
 		
+		SoundManager.play();
+		
 		Timer.delay(start, 2000);
 	}
 	
