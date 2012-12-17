@@ -141,22 +141,40 @@ class Test extends Scene
 		
 		if (!m_started) return;
 		
+		// Hitbox scarecrow
 		var _scareHB:Rectangle = scarecrow.hitbox.clone();
 		_scareHB.x += scarecrow.x;
 		_scareHB.y += scarecrow.y;
-		var _pooHB:Rectangle;
+		// Hitbox scarecrow
+		var _birdHB:Rectangle = bird.hitbox.clone();
+		_birdHB.x += bird.x;
+		_birdHB.y += bird.y;
+		// Collisions
+		var _tempHB:Rectangle;
 		var _toKill:Array<Entity> = new Array<Entity>();
 		for (_p in m_entities) {
+			// Poo/scarecrow collisions
 			if (Std.is(_p, Poo)) {
-				_pooHB = _p.hitbox.clone();
-				_pooHB.x += _p.x;
-				_pooHB.y += _p.y;
-				if (_scareHB.intersects(_pooHB)) {
+				_tempHB = _p.hitbox.clone();
+				_tempHB.x += _p.x;
+				_tempHB.y += _p.y;
+				if (_scareHB.intersects(_tempHB)) {
 					_toKill.push(_p);
 					scarecrow.hurt();
 				}
 			}
+			// Corn/bird collisions
+			else if (Std.is(_p, Corn)) {
+				_tempHB = _p.hitbox.clone();
+				_tempHB.x += _p.x;
+				_tempHB.y += _p.y;
+				if (_birdHB.intersects(_tempHB)) {
+					_toKill.push(_p);
+					bird.hurt();
+				}
+			}
 		}
+		// Remove obsolete entities
 		for (_p in _toKill) {
 			m_entities.remove(_p);
 			m_container.removeChild(_p);

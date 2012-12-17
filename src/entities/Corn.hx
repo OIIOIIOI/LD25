@@ -1,7 +1,9 @@
 package entities;
 import events.EventManager;
 import events.GameEvent;
+import flash.display.Shape;
 import flash.display.Sprite;
+import flash.geom.Rectangle;
 
 /**
  * ...
@@ -23,6 +25,13 @@ class Corn extends Entity
 		m_clip = new STONEMC();
 		m_clip.gotoAndStop(Std.random(m_clip.totalFrames));
 		addChild(m_clip);
+		
+		hitbox = new Rectangle(-5, -5, 10, 10);
+		var _hit:Shape = new Shape();
+		_hit.graphics.beginFill(0xFFFF00, 0.5);
+		_hit.graphics.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		_hit.graphics.endFill();
+		addChild(_hit);
 		
 		rotation = _rotation;
 		m_state = 0;
