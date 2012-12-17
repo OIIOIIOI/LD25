@@ -27,11 +27,11 @@ class Corn extends Entity
 		addChild(m_clip);
 		
 		hitbox = new Rectangle(-5, -5, 10, 10);
-		var _hit:Shape = new Shape();
-		_hit.graphics.beginFill(0xFFFF00, 0.5);
+		/*var _hit:Shape = new Shape();
+		_hit.graphics.beginFill(0xFFFF00, 0.8);
 		_hit.graphics.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
 		_hit.graphics.endFill();
-		addChild(_hit);
+		addChild(_hit);*/
 		
 		rotation = _rotation;
 		m_state = 0;

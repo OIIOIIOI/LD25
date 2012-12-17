@@ -34,6 +34,7 @@ class Test extends Scene
 	public var seeds:Array<Seed>;
 	public var nest:Nest;
 	private var m_container:Sprite;
+	private var m_seedsContainer:Sprite;
 	private var m_bushes:BUSHES;
 	private var m_started:Bool;
 	
@@ -43,7 +44,7 @@ class Test extends Scene
 		mode = _mode;
 		m_started = false;
 		
-		var _sky:Sprite = (true) ? new DAYLIGHTBG() : new NIGHTLIGHTBG();
+		var _sky:Sprite = (false) ? new DAYLIGHTBG() : new NIGHTLIGHTBG();
 		addChild(_sky);
 		
 		var _background:GAMEBG = new GAMEBG();
@@ -53,13 +54,15 @@ class Test extends Scene
 		addChild(scarecrow);
 		m_entities.push(scarecrow);
 		
+		m_seedsContainer = new Sprite();
+		
 		seeds = new Array<Seed>();
 		var _seed:Seed;
 		for (_i in 0...3) {
 			_seed = new Seed();
 			_seed.x = Std.random(200) + 80 + _i * 235;
-			_seed.y = Game.BOTTOM_LINE;
-			addChild(_seed);
+			_seed.y = Game.BOTTOM_LINE - 50;
+			m_seedsContainer.addChild(_seed);
 			m_entities.push(_seed);
 			seeds.push(_seed);
 		}
@@ -79,13 +82,15 @@ class Test extends Scene
 		m_container = new Sprite();
 		addChild(m_container);
 		
+		addChild(m_seedsContainer);
+		
 		m_bushes = new BUSHES();
 		m_bushes.y = 500;
 		addChild(m_bushes);
 		
-		if (!true) {
+		if (!false) {
 			var _nightFilter:Sprite = new Sprite();
-			_nightFilter.graphics.beginFill(0x486985);
+			_nightFilter.graphics.beginFill(0x486985, 0.7);
 			_nightFilter.graphics.drawRect(0, 0, 900, 500);
 			_nightFilter.graphics.endFill();
 			_nightFilter.blendMode = BlendMode.MULTIPLY;
@@ -145,11 +150,19 @@ class Test extends Scene
 		var _scareHB:Rectangle = scarecrow.hitbox.clone();
 		_scareHB.x += scarecrow.x;
 		_scareHB.y += scarecrow.y;
+		// Hitbox next
+		var _nestHB:Rectangle = nest.hitbox.clone();
+		_nestHB.x += nest.x;
+		_nestHB.y += nest.y;
 		// Hitbox scarecrow
 		var _birdHB:Rectangle = bird.hitbox.clone();
 		_birdHB.x += bird.x;
 		_birdHB.y += bird.y;
 		// Collisions
+		if (bird.state == Bird.STATE_CARRYING && _nestHB.intersects(_birdHB)) {
+			bird.unload();
+			trace("MANUAL unload");
+		}
 		var _tempHB:Rectangle;
 		var _toKill:Array<Entity> = new Array<Entity>();
 		for (_p in m_entities) {
@@ -163,6 +176,16 @@ class Test extends Scene
 					scarecrow.hurt();
 				}
 			}
+			// Seed/bird collisions
+			else if (Std.is(_p, Seed) && bird.state != Bird.STATE_CARRYING) {
+				_tempHB = _p.hitbox.clone();
+				_tempHB.x += _p.x;
+				_tempHB.y += _p.y;
+				if (_birdHB.intersects(_tempHB)) {
+					_toKill.push(_p);
+					bird.grab();
+				}
+			}
 			// Corn/bird collisions
 			else if (Std.is(_p, Corn)) {
 				_tempHB = _p.hitbox.clone();
@@ -170,14 +193,26 @@ class Test extends Scene
 				_tempHB.y += _p.y;
 				if (_birdHB.intersects(_tempHB)) {
 					_toKill.push(_p);
-					bird.hurt();
+					if (bird.state == Bird.STATE_CARRYING) {
+						bird.unload();
+						var _seed:Seed = new Seed();
+						_seed.x = bird.x;
+						_seed.y = Math.min(bird.y + 40, Game.BOTTOM_LINE - 50);
+						//trace(bird.x + " / " + bird.y);
+						m_seedsContainer.addChild(_seed);
+						m_entities.push(_seed);
+						seeds.push(_seed);
+					}
+					//else
+						//bird.hurt();
 				}
 			}
 		}
 		// Remove obsolete entities
 		for (_p in _toKill) {
 			m_entities.remove(_p);
-			m_container.removeChild(_p);
+			_p.parent.removeChild(_p);
+			//m_container.removeChild(_p);
 		}
 		_toKill = null;
 	}

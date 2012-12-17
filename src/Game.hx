@@ -62,7 +62,7 @@ class Game extends Sprite
 		removeEventListener(Event.ADDED_TO_STAGE, init);
 		
 		// Init scene
-		//changeScene(GameScene.gameover);
+		//changeScene(GameScene.startMenu);
 		changeScene(GameScene.test);
 		
 		// Start main loop
@@ -100,9 +100,6 @@ class Game extends Sprite
 			case GameScene.test:		new Test(Test.MODE_BIRD);
 		}
 		addChild(scene);
-		/*// TODO Play music (make music)
-		if (scene.theme != null)
-			playTheme(scene.theme);*/
 	}
 	
 	private function enterFrameHandler (_event:Event) :Void {

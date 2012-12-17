@@ -1,5 +1,7 @@
 package entities;
+import flash.display.Shape;
 import flash.display.Sprite;
+import flash.geom.Rectangle;
 
 /**
  * ...
@@ -15,10 +17,14 @@ class Nest extends Entity
 		super();
 		
 		m_clip = new NESTMC();
-		/*m_clip.graphics.beginFill(0x000000);
-		m_clip.graphics.drawRect(0, 0, 80, 20);
-		m_clip.graphics.endFill();*/
 		addChild(m_clip);
+		
+		hitbox = new Rectangle(-25, -5, 50, 30);
+		/*var _hit:Shape = new Shape();
+		_hit.graphics.beginFill(0xFFFF00, 0.8);
+		_hit.graphics.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		_hit.graphics.endFill();
+		addChild(_hit);*/
 	}
 	
 }

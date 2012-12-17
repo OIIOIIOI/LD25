@@ -52,11 +52,11 @@ class Bird extends Entity
 		addChild(m_clip);
 		
 		hitbox = new Rectangle(-5, -10, 30, 24);
-		var _hit:Shape = new Shape();
-		_hit.graphics.beginFill(0xFFFF00, 0.5);
+		/*var _hit:Shape = new Shape();
+		_hit.graphics.beginFill(0xFFFF00, 0.8);
 		_hit.graphics.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
 		_hit.graphics.endFill();
-		addChild(_hit);
+		addChild(_hit);*/
 		
 		state = STATE_NESTED;
 		
@@ -73,12 +73,13 @@ class Bird extends Entity
 	public function start () :Void {
 		if (state != STATE_NESTED) return;
 		m_clip.gotoAndStop(2);
-		Timer.delay(realStart, 100);
+		Timer.delay(realStart, 1000);
 	}
 	
 	private function realStart () :Void {
 		state = STATE_FLYING;
 		m_clip.gotoAndPlay("fly");
+		m_clip.body.gotoAndStop("fly");
 	}
 	
 	override public function update () :Void {
@@ -135,16 +136,18 @@ class Bird extends Entity
 		// Update
 		x += velocity.x;
 		y += velocity.y;
-		x = Math.min(Math.max(x, 0), 900);
-		y = Math.min(Math.max(y, 0), Game.BOTTOM_LINE);
+		x = Math.min(Math.max(x, 30), 860);
+		y = Math.min(Math.max(y, 30), Game.BOTTOM_LINE - 20);
 		
 		// Target change
 		if (!playerOperated && m_target != null) {
 			if (Math.abs(x - m_target.x) < 5 && Math.abs(y - m_target.y) < 5) {
 				if (m_target != m_scene.nest)
 					m_target = m_scene.nest;
-				else
+				else {
 					m_target = null;
+					trace("IA unload");
+				}
 			}
 		}
 	}
@@ -156,14 +159,26 @@ class Bird extends Entity
 	
 	public function hurt () :Void {
 		if (state == STATE_HURT) return;
-		m_clip.gotoAndPlay("hurt");
+		m_clip.body.gotoAndStop("hurt");
 		state = STATE_HURT;
-		Timer.delay(hurtEnd, 1000);
+		Timer.delay(hurtEnd, 500);
 	}
 	
 	public function hurtEnd () :Void {
 		if (state == STATE_FLYING) return;
-		m_clip.gotoAndPlay("fly");
+		m_clip.body.gotoAndStop("fly");
+		state = STATE_FLYING;
+	}
+	
+	public function grab () :Void {
+		if (state == STATE_CARRYING) return;
+		m_clip.body.gotoAndStop("carry");
+		state = STATE_CARRYING;
+	}
+	
+	public function unload () :Void {
+		if (state != STATE_CARRYING) return;
+		m_clip.body.gotoAndStop("fly");
 		state = STATE_FLYING;
 	}
 	

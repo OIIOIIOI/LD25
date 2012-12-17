@@ -1,5 +1,6 @@
 package entities;
 
+import flash.display.Shape;
 import flash.display.Sprite;
 import flash.geom.Rectangle;
 import scenes.Test;
@@ -19,10 +20,15 @@ class Seed extends Entity
 	public function new () {
 		super();
 		
-		hitbox = new Rectangle(-10, -10, 20, 20);
-		
 		m_clip = new SEEDMC();
 		addChild(m_clip);
+		
+		hitbox = new Rectangle(-15, -15, 30, 30);
+		/*var _hit:Shape = new Shape();
+		_hit.graphics.beginFill(0xFFFF00, 0.8);
+		_hit.graphics.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		_hit.graphics.endFill();
+		addChild(_hit);*/
 		
 		m_vy = 0;
 		m_state = 0;
@@ -32,13 +38,13 @@ class Seed extends Entity
 		super.update();
 		
 		if (y < Game.BOTTOM_LINE && m_state == 0) {
-			m_vy = 1;
+			m_vy = 2;
 			m_state = 1;
 		}
 		
 		if (m_state == 1) {
 			m_vy *= 1.1;
-			m_vy = Math.min(Math.max(m_vy, 0), 5);
+			m_vy = Math.min(Math.max(m_vy, 0), 7);
 			y += m_vy;
 			if (y > Game.BOTTOM_LINE) {
 				y = Game.BOTTOM_LINE;
