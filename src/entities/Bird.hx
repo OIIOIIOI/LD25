@@ -12,7 +12,6 @@ import flash.geom.Rectangle;
 import flash.ui.Keyboard;
 import haxe.Timer;
 import scenes.Scene;
-import scenes.SoundManager;
 import scenes.Play;
 
 /**
@@ -148,21 +147,6 @@ class Bird extends Entity
 		y += velocity.y;
 		x = Math.min(Math.max(x, 30), 860);
 		y = Math.min(Math.max(y, 30), Game.BOTTOM_LINE - 20);
-		
-		/*// Target change
-		if (!playerOperated && m_target != null) {
-			if (Math.abs(x - m_target.x) < 5 && Math.abs(y - m_target.y) < 5) {
-				trace("ARRIVED");
-				if (m_target != m_scene.nest) {
-					trace("CHOOSE NEST");
-					m_target = m_scene.nest;
-				}
-				else {
-					m_target = null;
-					trace("IA unload");
-				}
-			}
-		}*/
 	}
 	
 	public var velocity (getVelocity, null):Point;

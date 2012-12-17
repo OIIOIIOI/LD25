@@ -1,4 +1,5 @@
-package scenes;
+package ;
+
 import flash.events.TimerEvent;
 import flash.media.Sound;
 import flash.media.SoundChannel;

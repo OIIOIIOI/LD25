@@ -3,7 +3,6 @@ package entities;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.geom.Rectangle;
-import scenes.SoundManager;
 import scenes.Play;
 
 /**
