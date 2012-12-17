@@ -118,7 +118,8 @@ class Play extends Scene
 		goTF.y = 200;
 		addChild(goTF);
 		
-		SoundManager.play();
+		var _track:String = (false) ? "NIGHT_MUSIC" : "DAY_MUSIC";
+		SoundManager.play(_track);
 		
 		Timer.delay(start, 2000);
 	}

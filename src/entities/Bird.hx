@@ -140,7 +140,7 @@ class Bird extends Entity
 					_diff = Math.max(_diff, -ROTATION_SPEED);
 				rotation -= _diff;
 			}
-			if (Date.now().getTime() - m_lastShot > m_currentInterval)
+			if (Date.now().getTime() - m_lastShot > m_currentInterval * 5)
 				shoot();
 		}
 		
