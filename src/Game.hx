@@ -62,8 +62,8 @@ class Game extends Sprite
 		
 		// Init scene
 		//changeScene(GameScene.startMenu);
-		//changeScene(GameScene.play);
-		changeScene(GameScene.gameover);
+		changeScene(GameScene.play);
+		//changeScene(GameScene.gameover);
 		
 		// Start main loop
 		lastFrame = 0;

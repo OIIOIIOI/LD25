@@ -27,6 +27,7 @@ class SoundManager
 	}
 	
 	public static function stop(soundchannel:SoundChannel):Void {
+		if (soundchannel == null) return;
 		soundchannel.stop();
 	}
 	
