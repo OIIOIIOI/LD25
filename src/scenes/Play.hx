@@ -58,7 +58,8 @@ class Play extends Scene
 		mode = _mode;
 		m_started = false;
 		
-		DAY = (Std.random(2) % 2 == 0);
+		//DAY = (Std.random(2) % 2 == 0);
+		DAY = true;
 		
 		var _sky:Sprite = (DAY) ? new DAYLIGHTBG() : new NIGHTLIGHTBG();
 		addChild(_sky);
