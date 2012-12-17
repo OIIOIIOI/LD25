@@ -49,14 +49,14 @@ class ScoreManager
 		birdLives = 3;
 	}
 	
-	public static function dropSeed () :Bool {
+	public static function dropSeed () :Int {
 		seedsDropped++;
-		return (seedsDropped >= 3);
+		return seedsDropped;
 	}
 	
-	public static function shootBird () :Bool {
+	public static function shootBird () :Int {
 		birdLives--;
-		return (birdLives <= 0);
+		return birdLives;
 	}
 	
 }
