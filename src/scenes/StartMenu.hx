@@ -19,6 +19,7 @@ class StartMenu extends Scene
 	private var newgamebtnGraphics:NEWGAMEBTN;
 	private var scorebtnGraphics:SCOREBTN;
 	private var startmenubg:STARTMENUBG;
+	private var titlestain:TITLEBLOCK;
 	
 	public function new () {
 		super();
@@ -26,6 +27,7 @@ class StartMenu extends Scene
 		creditsbtnGraphics = new CREDITBTN();
 		newgamebtnGraphics = new NEWGAMEBTN();
 		scorebtnGraphics = new SCOREBTN();
+		titlestain = new TITLEBLOCK();
 		addChild(startmenubg);
 		addChild(creditsbtnGraphics);
 		creditsbtnGraphics.y = 455;
@@ -36,6 +38,9 @@ class StartMenu extends Scene
 		addChild(scorebtnGraphics);
 		scorebtnGraphics.y = 455;
 		scorebtnGraphics.x = 460;
+		addChild(titlestain);
+		titlestain.x=500;
+		titlestain.y=0;
 	}
 	
 	override private function clickHandler (_event:MouseEvent) :Void {

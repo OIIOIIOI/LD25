@@ -42,7 +42,6 @@ class Game extends Sprite
 	
 	public function new () {
 		super();
-		
 		instance = this;
 		// Saved data
 		SO = SharedObject.getLocal("seedsofwrath");
@@ -62,8 +61,8 @@ class Game extends Sprite
 		removeEventListener(Event.ADDED_TO_STAGE, init);
 		
 		// Init scene
-		//changeScene(GameScene.startMenu);
-		changeScene(GameScene.test);
+		changeScene(GameScene.startMenu);
+		//changeScene(GameScene.test);
 		
 		// Start main loop
 		lastFrame = 0;
