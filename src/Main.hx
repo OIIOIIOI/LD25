@@ -8,8 +8,8 @@ import flash.Lib;
 /**
  * ...
  * @author 01101101
- */
 
+ */
 class Main
 {
 	
