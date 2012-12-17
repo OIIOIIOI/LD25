@@ -170,6 +170,7 @@ class Play extends Scene
 		EventManager.instance.addEventListener(GameEvent.POO_LANDING, gameEventHandler);
 		EventManager.instance.addEventListener(GameEvent.REMOVE_POO, gameEventHandler);
 		EventManager.instance.addEventListener(GameEvent.REMOVE_CORN, gameEventHandler);
+		EventManager.instance.addEventListener(GameEvent.DESTROY_FEATHERS, gameEventHandler);
 		EventManager.instance.addEventListener(GameEvent.END_GAME, gameEventHandler);
 	}
 	
@@ -208,6 +209,11 @@ class Play extends Scene
 				m_started = false;
 				SoundManager.stop(m_channel);
 				Timer.delay(callback(endGame, _event.data), 500);
+			case GameEvent.DESTROY_FEATHERS:
+				var _target:Sprite = _event.data;
+				if (_target.parent != null)
+					_target.parent.removeChild(_target);
+				_target = null;
 		}
 	}
 	

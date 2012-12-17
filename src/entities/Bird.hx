@@ -180,6 +180,10 @@ class Bird extends Entity
 		m_clip.body.gotoAndStop("hurt");
 		//state = STATE_HURT;
 		SoundManager.play("BIRD_HURT_" + Std.random(3) + "_SND");
+		var _feathers:FEATHERS_BOOM = new FEATHERS_BOOM();
+		_feathers.x = x;
+		_feathers.y = y;
+		m_scene.addChild(_feathers);
 		Timer.delay(hurtEnd, 500);
 	}
 	
