@@ -6,6 +6,9 @@ import flash.events.MouseEvent;
 import flash.filters.ColorMatrixFilter;
 import flash.geom.ColorTransform;
 import flash.media.SoundChannel;
+import flash.text.TextField;
+import flash.text.TextFormat;
+import flash.text.TextFormatAlign;
 import flash.ui.Mouse;
 import Game;
 import scenes.Scene;
@@ -25,6 +28,8 @@ class CharaChoice extends Scene
 	//private var birdselecbtn:BIRDSELEC;
 	private var charabtn:CHARABTN;
 	private var backbtn:BACKBTN;
+	private var tutorialtext:TextField;
+	private var tutoformat:TextFormat;
 	
 	public function new () {
 		super();
@@ -35,6 +40,9 @@ class CharaChoice extends Scene
 		//birdselecbtn = new BIRDSELEC();
 		charabtn = new CHARABTN();
 		backbtn = new BACKBTN();
+		tutorialtext = new TextField();
+		tutoformat = new TextFormat("GoodDog", 20);
+		tutoformat.align = TextFormatAlign.CENTER;
 		
 		scareselecbtn.y = -4;
 		birdselecbtn.x = 398;
@@ -44,13 +52,19 @@ class CharaChoice extends Scene
 		backbtn.x = 820;
 		backbtn.y = 20;
 		
-		//startmenubg.transform.colorTransform = new ColorTransform(0.8, 0.8, 0.8);
+		tutorialtext.defaultTextFormat = tutoformat;
+		tutorialtext.x = 200;
+		tutorialtext.y = 440;
+		tutorialtext.width = 500;
+		tutorialtext.height = 60;
+		tutorialtext.wordWrap = true;
 		
 		addChild(startmenubg);
 		addChild(scareselecbtn);
 		addChild(birdselecbtn);
 		addChild(charabtn);
 		addChild(backbtn);
+		addChild(tutorialtext);
 		
 		scareselecbtn.addEventListener(MouseEvent.ROLL_OVER, changeselecbtn);
 		birdselecbtn.addEventListener(MouseEvent.ROLL_OVER, changeselecbtn);
@@ -65,10 +79,12 @@ class CharaChoice extends Scene
 				charabtn.gotoAndStop(3);
 				//birdselecbtn.transform.colorTransform = new ColorTransform(0.25, 0.25, 0.25, 1);
 				scareselecbtn.addEventListener(MouseEvent.ROLL_OUT, resetselecbtn);
+				tutorialtext.text = "Stone the starving little birdie and keep the seeds for yerself!\nLEFT/RIGHT to aim and SPACE to spitt";
 			case birdselecbtn:
 				charabtn.gotoAndStop(2);
 				//scareselecbtn.transform.colorTransform = new ColorTransform(0.25, 0.25, 0.25, 1);
 				birdselecbtn.addEventListener(MouseEvent.ROLL_OUT, resetselecbtn);
+				tutorialtext.text = "Poo on the dummy, rob the seeds, conquer for wilderness!\nLEFT/RIGHT to rotate and SPACE to drop";
 			case backbtn:
 				charabtn.gotoAndStop(4);
 				backbtn.addEventListener(MouseEvent.ROLL_OUT, resetselecbtn);
@@ -82,6 +98,7 @@ class CharaChoice extends Scene
 		//startmenubg.transform.colorTransform = new ColorTransform();
 		birdselecbtn.transform.colorTransform = new ColorTransform();
 		scareselecbtn.transform.colorTransform = new ColorTransform();
+		tutorialtext.text = "";
 		me.target.removeEventListener(MouseEvent.ROLL_OUT, resetselecbtn);
 		charabtn.gotoAndStop(1);
 		scareselecbtn.addEventListener(MouseEvent.ROLL_OVER, changeselecbtn);
