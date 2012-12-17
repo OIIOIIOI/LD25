@@ -5,13 +5,13 @@
     <movie outputType="Application" />
     <movie input="" />
     <movie path="bin\L25.swf" />
-    <movie fps="48" />
+    <movie fps="60" />
     <movie width="900" />
     <movie height="500" />
     <movie version="10" />
     <movie minorVersion="1" />
     <movie platform="Flash Player" />
-    <movie background="#EEEEEE" />
+    <movie background="#FFFFFF" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -23,7 +23,7 @@
     <option flashStrict="False" />
     <option mainClass="Main" />
     <option enabledebug="True" />
-    <option additional="-swf-lib res/library.swf&#xA;-swf-lib res/fonts.swf" />
+    <option additional="-swf-lib res/library.swf" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
