@@ -17,6 +17,7 @@ import flash.geom.Rectangle;
 import flash.media.SoundChannel;
 import flash.text.AntiAliasType;
 import flash.text.TextField;
+import flash.text.TextFieldType;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import haxe.Timer;
@@ -43,6 +44,8 @@ class Play extends Scene
 	public var goTF:TextField;
 	private var m_container:Sprite;
 	private var m_seedsContainer:Sprite;
+	private var seedIcons:Sprite;
+	private var heartsIcons:Sprite;
 	private var m_bushes:BUSHES;
 	private var m_started:Bool;
 	private var m_channel:SoundChannel;
@@ -110,6 +113,31 @@ class Play extends Scene
 			addChild(_nightFilter);
 		}
 		
+		// Seeds icons
+		seedIcons = new Sprite();
+		seedIcons.x = seedIcons.y = 40;
+		var _icon:ICONSMC;
+		for (i in 0...3) {
+			_icon = new ICONSMC();
+			_icon.gotoAndStop("seed");
+			_icon.x = i * 40;
+			seedIcons.addChild(_icon);
+		}
+		addChild(seedIcons);
+		
+		// Hearts icons
+		heartsIcons = new Sprite();
+		var _icon:ICONSMC;
+		for (i in 0...3) {
+			_icon = new ICONSMC();
+			_icon.gotoAndStop("heart");
+			_icon.x = (-80) + i * 40;
+			heartsIcons.addChild(_icon);
+		}
+		heartsIcons.x = 900 - 40;
+		heartsIcons.y = seedIcons.y;
+		addChild(heartsIcons);
+		
 		var _format:TextFormat = new TextFormat("TrashHand", 60, 0x000000);
 		//var _format:TextFormat = new TextFormat("TrueCrimes", 24, 0x000000);
 		_format.align = TextFormatAlign.CENTER;
@@ -142,6 +170,7 @@ class Play extends Scene
 		EventManager.instance.addEventListener(GameEvent.POO_LANDING, gameEventHandler);
 		EventManager.instance.addEventListener(GameEvent.REMOVE_POO, gameEventHandler);
 		EventManager.instance.addEventListener(GameEvent.REMOVE_CORN, gameEventHandler);
+		EventManager.instance.addEventListener(GameEvent.DESTROY_FEATHERS, gameEventHandler);
 		EventManager.instance.addEventListener(GameEvent.END_GAME, gameEventHandler);
 	}
 	
@@ -180,6 +209,11 @@ class Play extends Scene
 				m_started = false;
 				SoundManager.stop(m_channel);
 				Timer.delay(callback(endGame, _event.data), 500);
+			case GameEvent.DESTROY_FEATHERS:
+				var _target:Sprite = _event.data;
+				if (_target.parent != null)
+					_target.parent.removeChild(_target);
+				_target = null;
 		}
 	}
 	
@@ -231,7 +265,11 @@ class Play extends Scene
 			//trace("lock seed");
 			bird.seed.state = Seed.STATE_LOCKED;
 			bird.unload(true);
-			if (ScoreManager.dropSeed()) {
+			var _droppedSeeds:Int = ScoreManager.dropSeed();
+			for (i in 0..._droppedSeeds) {
+				seedIcons.getChildAt(i).alpha = 0.5;
+			}
+			if (_droppedSeeds >= 3) {
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.END_GAME, (bird.playerOperated)));
 			}
 			SoundManager.play("PROGRESS_3_SND");
@@ -280,7 +318,11 @@ class Play extends Scene
 					else {
 						//trace("real shot (" + bird.state + ")");
 						bird.hurt();
-						if (ScoreManager.shootBird()) {
+						var _lives:Int = ScoreManager.shootBird();
+						for (i in 0..._lives) {
+							heartsIcons.getChildAt(i).alpha = 0.5;
+						}
+						if (_lives <= 0) {
 							EventManager.instance.dispatchEvent(new GameEvent(GameEvent.END_GAME, (scarecrow.playerOperated)));
 						}
 					}

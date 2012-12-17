@@ -26,7 +26,7 @@ class Scarecrow extends Entity
 	private var lastShot:Float;
 	private var m_currentInterval:Float;
 	private var m_state:String;
-	public inline static var SHOOTING_INTERVAL:Int = 400;
+	public inline static var SHOOTING_INTERVAL:Int = 200;
 	public inline static var SHOOTING_RANDOM:Float = 1;
 	public inline static var ROTATION_SPEED:Float = 3;
 	public inline static var STATE_IDLE:String = "state_idle";
