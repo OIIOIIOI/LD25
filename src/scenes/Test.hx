@@ -44,7 +44,7 @@ class Test extends Scene
 		mode = _mode;
 		m_started = false;
 		
-		var _sky:Sprite = (false) ? new DAYLIGHTBG() : new NIGHTLIGHTBG();
+		var _sky:Sprite = (true) ? new DAYLIGHTBG() : new NIGHTLIGHTBG();
 		addChild(_sky);
 		
 		var _background:GAMEBG = new GAMEBG();
@@ -88,7 +88,7 @@ class Test extends Scene
 		m_bushes.y = 500;
 		addChild(m_bushes);
 		
-		if (!false) {
+		if (!true) {
 			var _nightFilter:Sprite = new Sprite();
 			_nightFilter.graphics.beginFill(0x486985, 0.7);
 			_nightFilter.graphics.drawRect(0, 0, 900, 500);
@@ -118,6 +118,7 @@ class Test extends Scene
 				_p.y = _event.data.y;
 				m_container.addChild(_p);
 				m_entities.push(_p);
+				SoundManager.play("BIRD_SHOOT_SND");
 			case GameEvent.SCARE_SHOOT:
 				var _p:Corn = new Corn(scarecrow.aim.rotation - 90);
 				_p.x = scarecrow.x + scarecrow.aim.x;
@@ -132,6 +133,7 @@ class Test extends Scene
 				m_entities.push(_q);
 				m_entities.remove(_event.data);
 				m_container.removeChild(_event.data);
+				SoundManager.play("POO_LAND_SND");
 			case GameEvent.REMOVE_POO:
 				m_entities.remove(_event.data);
 				m_container.removeChild(_event.data);
@@ -161,7 +163,7 @@ class Test extends Scene
 		// Collisions
 		if (bird.state == Bird.STATE_CARRYING && _nestHB.intersects(_birdHB)) {
 			bird.unload();
-			trace("MANUAL unload");
+			SoundManager.play("PROGRESS_3_SND");
 		}
 		var _tempHB:Rectangle;
 		var _toKill:Array<Entity> = new Array<Entity>();
@@ -195,6 +197,7 @@ class Test extends Scene
 					_toKill.push(_p);
 					if (bird.state == Bird.STATE_CARRYING) {
 						bird.unload();
+						SoundManager.play("BIRD_HURT_" + Std.random(3) + "_SND");
 						var _seed:Seed = new Seed();
 						_seed.x = bird.x;
 						_seed.y = Math.min(bird.y + 40, Game.BOTTOM_LINE - 50);
@@ -203,8 +206,8 @@ class Test extends Scene
 						m_entities.push(_seed);
 						seeds.push(_seed);
 					}
-					//else
-						//bird.hurt();
+					else
+						bird.hurt();
 				}
 			}
 		}

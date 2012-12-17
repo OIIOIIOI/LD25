@@ -3,6 +3,7 @@ package entities;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.geom.Rectangle;
+import scenes.SoundManager;
 import scenes.Test;
 
 /**
@@ -44,11 +45,12 @@ class Seed extends Entity
 		
 		if (m_state == 1) {
 			m_vy *= 1.1;
-			m_vy = Math.min(Math.max(m_vy, 0), 7);
+			m_vy = Math.min(Math.max(m_vy, 0), 6);
 			y += m_vy;
 			if (y > Game.BOTTOM_LINE) {
 				y = Game.BOTTOM_LINE;
 				m_state = 0;
+				SoundManager.play("SEED_LAND_SND");
 			}
 		}
 	}

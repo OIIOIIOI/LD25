@@ -10,10 +10,13 @@ import flash.utils.Timer;
  * @author 01101101
  */
 
-class SoundManager 
+class SoundManager
 {
-	public static function play(Soundclass:String,?loop:Int=0,?vol:Float=1,?balance:Float=0):SoundChannel {
-	var sound:Sound = Type.createInstance(Type.resolveClass(Soundclass), []);
+	public static function play (Soundclass:String, ?loop:Int = 0, ?vol:Float = 1, ?balance:Float = 0) :SoundChannel {
+		var _resolvedClass:Class<Dynamic> = Type.resolveClass(Soundclass);
+		if (_resolvedClass == null) return null;
+		var sound:Sound = Type.createInstance(_resolvedClass, []);
+		if (sound == null) return null;
 		var soundtransform:SoundTransform = new SoundTransform(vol,balance);
 		return sound.play(0, loop, soundtransform);
 	}
@@ -46,7 +49,7 @@ class SoundManager
 		fadetimer.start();
 	}
 	
-	/*public function new() 
+	/*public function new()
 	{
 		
 	}*/
