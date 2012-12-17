@@ -29,13 +29,17 @@ class ScoreManager
 		return score;
 	}
 	
+	public static function fromHighToLow():Void {
+		scoreBoard.sort(function(a:Dynamic, b:Dynamic):Int{ if (a.score < b.score) return 1; if (b.score < a.score) return -1; return 0; } );
+		trace(scoreBoard);
+	}
+	
 	public static function initScoreData (data:Array<Dynamic>):Void {
 		scoreBoard = data.concat([]);
 	}
 	
 	public static function saveScore (playerName:String):Void {
 		scoreBoard.push( { name:playerName, score: score } );
-		scoreBoard.sort(function(a:Int, b:Int) :Int { if (a > b) return 1; if (b > a) return -1; return 0; });
 	}
 	
 	/*public function new() 

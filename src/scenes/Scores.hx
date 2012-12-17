@@ -21,10 +21,14 @@ class Scores extends Scene
 	private var scDisPos :TextField;
 	private var scDisNam :TextField;
 	private var scDisSco :TextField;
+	private var scoredispcount :Int;
 
 	public function new()
 	{
 		super();
+		
+		ScoreManager.fromHighToLow();
+		
 		scorebg = new SCOREBG();
 		backbtn =  new BACKBTN();
 		scDisPos = new TextField();
@@ -33,16 +37,16 @@ class Scores extends Scene
 		
 		
 		//var scoreformat = new TextFormat("GoodDog", 32);
-		var scoreformat = new TextFormat("TrueCrimes", 32);
-		scoreformat.leading = 5;
+		var scoreformat = new TextFormat("TrueCrimes", 26);
+		scoreformat.leading = 10;
 		addChild(scorebg);
 		addChild(backbtn);
-		backbtn.y = 20;
-		backbtn.x = 820;
+		backbtn.x = 20;
+		backbtn.y = 430;
 		addChild(scDisPos);
-		scDisPos.x = 100;
-		scDisPos.y = 100;
-		scDisPos.width = 300;
+		scDisPos.x = 400;
+		scDisPos.y = 170;
+		scDisPos.width = 50;
 		scDisPos.height = 300;
 		scDisPos.embedFonts = true;
 		scDisPos.selectable = false;
@@ -50,26 +54,32 @@ class Scores extends Scene
 		scDisPos.defaultTextFormat = scoreformat;
 		scDisPos.text = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
 		addChild(scDisNam);
-		scDisNam.x = 150;
-		scDisNam.y = 100;
-		scDisNam.width = 300;
+		scDisNam.x = 450;
+		scDisNam.y = 170;
+		scDisNam.width = 200;
 		scDisNam.height = 300;
 		scDisNam.embedFonts = true;
 		scDisNam.selectable = false;
 		scDisNam.antiAliasType = AntiAliasType.ADVANCED;
 		scDisNam.defaultTextFormat = scoreformat;
 		addChild(scDisSco);
-		scDisSco.x = 400;
-		scDisSco.y = 100;
-		scDisSco.width = 300;
+		scDisSco.x = 650;
+		scDisSco.y = 170;
+		scDisSco.width = 200;
 		scDisSco.height = 300;
 		scDisSco.embedFonts = true;
 		scDisSco.selectable = false;
 		scDisSco.antiAliasType = AntiAliasType.ADVANCED;
 		scDisSco.defaultTextFormat = scoreformat;
+		scoredispcount = 0;
 		for (i in ScoreManager.scoreBoard) {
 			scDisNam.text += "" + i.name + "\n";
 			scDisSco.text += "" + i.score + "\n";
+			scoredispcount++;
+			if (scoredispcount > 10) {
+				scoredispcount = 0;
+				break;
+			}
 		}
 		scDisPos.setTextFormat(scoreformat);
 		scDisNam.setTextFormat(scoreformat);
