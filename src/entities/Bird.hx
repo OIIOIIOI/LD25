@@ -103,26 +103,26 @@ class Bird extends Entity
 			if (target == null) {
 				if (state == STATE_CARRYING) {
 					target = m_scene.nest;
-					trace("target nest (" + seed + ")");
+					//trace("target nest (" + seed + ")");
 					//seed = null;
 				}
 				else if (m_scene.seeds != null) {
 					var _temp:Array<Seed> = new Array();
-					trace(m_scene.seeds.length + " seeds");
+					//trace(m_scene.seeds.length + " seeds");
 					for (_s in m_scene.seeds) {
 						if (_s.state != Seed.STATE_LOCKED)
 							_temp.push(_s);
 					}
-					trace(_temp.length + " free seeds");
+					//trace(_temp.length + " free seeds");
 					if (_temp.length > 0) {
 						seed = _temp[Std.random(_temp.length)];
 						target = seed;
-						trace("target seed " + seed);
+						//trace("target seed " + seed);
 					}
 					else {
 						target = m_scene.nest;
 						seed = null;
-						trace("target nest (" + seed + ")");
+						//trace("target nest (" + seed + ")");
 					}
 				}
 			}
@@ -174,9 +174,9 @@ class Bird extends Entity
 	}
 	
 	public function hurt () :Void {
-		trace("---- HURT");
+		//trace("---- HURT");
 		if (state == STATE_HURT) return;
-		trace("bird hurt");
+		//trace("bird hurt");
 		m_clip.body.gotoAndStop("hurt");
 		//state = STATE_HURT;
 		SoundManager.play("BIRD_HURT_" + Std.random(3) + "_SND");
@@ -190,7 +190,7 @@ class Bird extends Entity
 	}
 	
 	public function grab (_seed:Seed) :Void {
-		trace("---- GRAB");
+		//trace("---- GRAB");
 		if (state == STATE_CARRYING) return;
 		m_clip.body.gotoAndStop("carry");
 		state = STATE_CARRYING;
@@ -202,18 +202,18 @@ class Bird extends Entity
 	}
 	
 	public function unload (_nest:Bool = false) :Void {
-		trace("---- UNLOAD");
+		//trace("---- UNLOAD");
 		if (state != STATE_CARRYING) return;
-		trace("unload: " + _nest);
+		//trace("unload: " + _nest);
 		m_clip.body.gotoAndStop("fly");
 		state = STATE_FLYING;
 		if (_nest) {
-			trace("nest -> no target no seed");
+			//trace("nest -> no target no seed");
 			target = null;
 			seed = null;
 		}
 		else {
-			trace("mid-air -> target = seed " + seed);
+			//trace("mid-air -> target = seed " + seed);
 			target = seed;
 		}
 	}

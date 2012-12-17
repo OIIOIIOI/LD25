@@ -17,7 +17,6 @@ class CharaChoice extends Scene
 {
 	
 	private var startmenubg:STARTMENUBG;
-	private var titlestain:TITLEBLOCK;
 	private var scareselecbtn:SCARESELECBTN;
 	private var birdselecbtn:BIRDSELECBTN;
 	private var charabtn:CHARABTN;
@@ -26,26 +25,27 @@ class CharaChoice extends Scene
 	public function new () {
 		super();
 		startmenubg = new STARTMENUBG();
-		titlestain = new TITLEBLOCK();
 		scareselecbtn = new SCARESELECBTN();
 		birdselecbtn = new BIRDSELECBTN();
 		charabtn = new CHARABTN();
 		backbtn = new BACKBTN();
 		
-		addChild(startmenubg);
-		addChild(scareselecbtn);
 		scareselecbtn.y = -5;
-		scareselecbtn.addEventListener(MouseEvent.ROLL_OVER, changeselecbtn);
-		addChild(birdselecbtn);
 		birdselecbtn.x = 398;
 		birdselecbtn.y = 194;
-		birdselecbtn.addEventListener(MouseEvent.ROLL_OVER, changeselecbtn);
-		addChild(charabtn);
-		charabtn.y = 380;
 		charabtn.x = 360;
-		addChild(backbtn);
-		backbtn.y = 20;
+		charabtn.y = 380;
 		backbtn.x = 820;
+		backbtn.y = 20;
+		
+		addChild(startmenubg);
+		addChild(scareselecbtn);
+		addChild(birdselecbtn);
+		addChild(charabtn);
+		addChild(backbtn);
+		
+		scareselecbtn.addEventListener(MouseEvent.ROLL_OVER, changeselecbtn);
+		birdselecbtn.addEventListener(MouseEvent.ROLL_OVER, changeselecbtn);
 		backbtn.addEventListener(MouseEvent.ROLL_OVER, changeselecbtn);
 	}
 	
@@ -65,7 +65,6 @@ class CharaChoice extends Scene
 		charabtn.removeEventListener(MouseEvent.ROLL_OVER, changeselecbtn);
 		backbtn.removeEventListener(MouseEvent.ROLL_OVER, changeselecbtn);
 	}
-	
 	
 	private function resetselecbtn(me:MouseEvent):Void {
 		me.target.removeEventListener(MouseEvent.ROLL_OUT, resetselecbtn);

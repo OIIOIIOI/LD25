@@ -5,6 +5,7 @@ import events.GameEvent;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
 import Game;
+import haxe.Timer;
 
 /**
  * ...

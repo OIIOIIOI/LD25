@@ -61,8 +61,9 @@ class Game extends Sprite
 		removeEventListener(Event.ADDED_TO_STAGE, init);
 		
 		// Init scene
-		changeScene(GameScene.startMenu);
+		//changeScene(GameScene.startMenu);
 		//changeScene(GameScene.play);
+		changeScene(GameScene.gameover);
 		
 		// Start main loop
 		lastFrame = 0;
@@ -96,7 +97,7 @@ class Game extends Sprite
 			case GameScene.score:		new Scores();
 			case GameScene.charachoice:	new CharaChoice();
 			case GameScene.play:
-				if (_param == null) _param = Play.MODE_BIRD;
+				if (_param == null) _param = Play.MODE_SCARE;
 				new Play(_param);
 		}
 		addChild(scene);

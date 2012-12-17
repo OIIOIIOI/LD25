@@ -14,6 +14,7 @@ import flash.display.BlendMode;
 import flash.display.Sprite;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.media.SoundChannel;
 import flash.text.AntiAliasType;
 import flash.text.TextField;
 import flash.text.TextFormat;
@@ -31,6 +32,7 @@ class Play extends Scene
 	
 	inline static public var MODE_BIRD:String = "mode_bird";
 	inline static public var MODE_SCARE:String = "mode_scare";
+	static public var DAY:Bool = true;
 	
 	public var mode:String;
 	public var bird:Bird;
@@ -42,6 +44,7 @@ class Play extends Scene
 	private var m_seedsContainer:Sprite;
 	private var m_bushes:BUSHES;
 	private var m_started:Bool;
+	private var m_channel:SoundChannel;
 	
 	public function new (_mode:String) {
 		super();
@@ -49,7 +52,9 @@ class Play extends Scene
 		mode = _mode;
 		m_started = false;
 		
-		var _sky:Sprite = (true) ? new DAYLIGHTBG() : new NIGHTLIGHTBG();
+		DAY = (Std.random(2) % 2 == 0);
+		
+		var _sky:Sprite = (DAY) ? new DAYLIGHTBG() : new NIGHTLIGHTBG();
 		addChild(_sky);
 		
 		var _background:GAMEBG = new GAMEBG();
@@ -93,7 +98,7 @@ class Play extends Scene
 		m_bushes.y = 500;
 		addChild(m_bushes);
 		
-		if (!true) {
+		if (!DAY) {
 			var _nightFilter:Sprite = new Sprite();
 			_nightFilter.graphics.beginFill(0x486985, 0.7);
 			_nightFilter.graphics.drawRect(0, 0, 900, 500);
@@ -118,8 +123,8 @@ class Play extends Scene
 		goTF.y = 200;
 		addChild(goTF);
 		
-		var _track:String = (false) ? "NIGHT_MUSIC" : "DAY_MUSIC";
-		SoundManager.play(_track);
+		var _track:String = (DAY) ? "DAY_MUSIC" : "NIGHT_MUSIC";
+		m_channel = SoundManager.play(_track, 0, 0.7);
 		
 		Timer.delay(start, 2000);
 	}
@@ -133,6 +138,7 @@ class Play extends Scene
 		EventManager.instance.addEventListener(GameEvent.POO_LANDING, gameEventHandler);
 		EventManager.instance.addEventListener(GameEvent.REMOVE_POO, gameEventHandler);
 		EventManager.instance.addEventListener(GameEvent.REMOVE_CORN, gameEventHandler);
+		EventManager.instance.addEventListener(GameEvent.END_GAME, gameEventHandler);
 	}
 	
 	private function gameEventHandler (_event:GameEvent) :Void {
@@ -166,7 +172,28 @@ class Play extends Scene
 			case GameEvent.REMOVE_CORN:
 				m_entities.remove(_event.data);
 				m_container.removeChild(_event.data);
+			case GameEvent.END_GAME:
+				m_started = false;
+				SoundManager.stop(m_channel);
+				Timer.delay(callback(endGame, _event.data), 500);
 		}
+	}
+	
+	private function endGame (_victory:Bool) :Void {
+		Timer.delay(callback(playJingle, _victory), 1500);
+		if (_victory) {
+			if (mode == MODE_SCARE)	SoundManager.play("BIRD_DIE_SND");
+			else					SoundManager.play("SC_DIE_SND");
+		} else {
+			if (mode == MODE_SCARE)	SoundManager.play("SC_DIE_SND");
+			else					SoundManager.play("BIRD_DIE_SND");
+		}
+	}
+	
+	private function playJingle (_victory:Bool) :Void {
+		SoundManager.play((_victory) ? "WIN_SND" : "FAIL_SND");
+		goTF.text = (_victory) ? "VICTORY" : "DEFEAT";
+		addChild(goTF);
 	}
 	
 	override public function update () :Void {
@@ -188,9 +215,12 @@ class Play extends Scene
 		_birdHB.y += bird.y;
 		// Collisions
 		if (bird.state == Bird.STATE_CARRYING && _nestHB.intersects(_birdHB)) {
-			trace("lock seed");
+			//trace("lock seed");
 			bird.seed.state = Seed.STATE_LOCKED;
 			bird.unload(true);
+			if (ScoreManager.dropSeed()) {
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.END_GAME, (bird.playerOperated)));
+			}
 			SoundManager.play("PROGRESS_3_SND");
 		}
 		var _tempHB:Rectangle;
@@ -228,15 +258,18 @@ class Play extends Scene
 						var _seed:Seed = bird.seed;
 						_seed.x = bird.x;
 						_seed.y = Math.min(bird.y + 40, Game.BOTTOM_LINE - 50);
-						trace("shot carrying");
+						//trace("shot carrying");
 						bird.unload();
 						m_seedsContainer.addChild(_seed);
 						m_entities.push(_seed);
 						//seeds.push(_seed);
 					}
 					else {
-						trace("real shot (" + bird.state + ")");
+						//trace("real shot (" + bird.state + ")");
 						bird.hurt();
+						if (ScoreManager.shootBird()) {
+							EventManager.instance.dispatchEvent(new GameEvent(GameEvent.END_GAME, (scarecrow.playerOperated)));
+						}
 					}
 				}
 			}

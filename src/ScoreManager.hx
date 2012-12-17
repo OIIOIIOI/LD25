@@ -5,10 +5,12 @@ package ;
  * @author 01101101
  */
 
-class ScoreManager 
+class ScoreManager
 {
 	public static var score :Int;
 	public static var scoreBoard :Array<Dynamic>;
+	public static var seedsDropped :Int;
+	public static var birdLives :Int;
 	
 	public static function reset ():Void {
 		score = 0;
@@ -38,9 +40,19 @@ class ScoreManager
 		scoreBoard.sort(function(a:Int, b:Int) :Int { if (a > b) return 1; if (b > a) return -1; return 0; });
 	}
 	
-	/*public function new() 
-	{
-		
-	}*/
+	public static function resetGame () :Void {
+		seedsDropped = 0;
+		birdLives = 3;
+	}
+	
+	public static function dropSeed () :Bool {
+		seedsDropped++;
+		return (seedsDropped >= 3);
+	}
+	
+	public static function shootBird () :Bool {
+		birdLives--;
+		return (birdLives <= 0);
+	}
 	
 }
