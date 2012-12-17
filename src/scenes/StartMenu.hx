@@ -21,6 +21,8 @@ class StartMenu extends Scene
 	private var scorebtnGraphics:SCOREBTN;
 	private var startmenubg:STARTMENUBG;
 	private var titlestain:TITLEBLOCK;
+	public var menutheme:SoundChannel;
+	public static var menuthemeisplaying:Bool = false;
 	
 	public function new () {
 		super();
@@ -29,6 +31,11 @@ class StartMenu extends Scene
 		newgamebtnGraphics = new NEWGAMEBTN();
 		scorebtnGraphics = new SCOREBTN();
 		titlestain = new TITLEBLOCK();
+		
+		if (menuthemeisplaying == false) {
+			menuthemeisplaying = true;
+			menutheme = SoundManager.play("MENU_MUSIC", 9999);
+		}
 		
 		addChild(startmenubg);
 		addChild(creditsbtnGraphics);
@@ -46,11 +53,14 @@ class StartMenu extends Scene
 	}
 	
 	override private function clickHandler (_event:MouseEvent) :Void {
+		SoundManager.play("CLICK_SND");
 		switch (_event.target) {
 			case scorebtnGraphics:
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.score } ));
 			case creditsbtnGraphics:
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.credits } ));
+				menutheme.stop();
+				menuthemeisplaying = false;
 			case newgamebtnGraphics:
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.charachoice } ));
 		}

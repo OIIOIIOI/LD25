@@ -23,11 +23,10 @@ class Scarecrow extends Entity
 	public var aim:AIMMC;
 	private var m_clip:SCARECROWMC;
 	private var m_scene:Play;
-	private var test:Int;
 	private var lastShot:Float;
 	private var m_currentInterval:Float;
 	private var m_state:String;
-	public inline static var SHOOTING_INTERVAL:Int = 100;
+	public inline static var SHOOTING_INTERVAL:Int = 1000;
 	public inline static var SHOOTING_RANDOM:Float = 1;
 	public inline static var ROTATION_SPEED:Float = 3;
 	public inline static var STATE_IDLE:String = "state_idle";
@@ -95,7 +94,7 @@ class Scarecrow extends Entity
 		if (m_state == STATE_HURT) return;
 		m_clip.gotoAndPlay("hurt");
 		m_state = STATE_HURT;
-		SoundManager.play("SC_HURT_SND");
+		SoundManager.play("SC_HURT_" + Std.random(3) + "_SND");
 		Timer.delay(hurtEnd, 2000);
 	}
 	

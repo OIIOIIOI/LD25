@@ -49,7 +49,7 @@ class Game extends Sprite
 		if (SO.data.scoresData == null || !Std.is(SO.data.scoresData, Array)) {
 			SO.data.scoresData = new Array<Dynamic>();
 			SO.data.scoresData.push( { name:"SIMON", score:2000 }, { name:"GRMPF", score:9100 }, { name:"NI!", score:3400 }, { name:"NOC", score:4500 },  { name:"CAPTAIN", score:1100 } );
-			SO.data.scoresData.sort(function(a:Int, b:Int):Int{ if (a > b) return 1; if (b > a) return -1; return 0; } );
+			SO.data.scoresData.sort(function(a:Dynamic, b:Dynamic):Int{ if (a.score > b.score) return 1; if (b.score > a.score) return -1; return 0; } );
 			SO.flush();
 		}
 		ScoreManager.initScoreData(SO.data.scoresData);
@@ -62,7 +62,7 @@ class Game extends Sprite
 		
 		// Init scene
 		changeScene(GameScene.startMenu);
-		//changeScene(GameScene.test);
+		//changeScene(GameScene.play);
 		
 		// Start main loop
 		lastFrame = 0;
@@ -95,8 +95,9 @@ class Game extends Sprite
 			case GameScene.gameover:	new GameOver();
 			case GameScene.score:		new Scores();
 			case GameScene.charachoice:	new CharaChoice();
-			case GameScene.test:		new Play(Play.MODE_SCARE);
-			//case GameScene.test:		new Play(Play.MODE_BIRD);
+			case GameScene.play:
+				if (_param == null) _param = Play.MODE_BIRD;
+				new Play(_param);
 		}
 		addChild(scene);
 	}
@@ -119,7 +120,7 @@ enum GameScene {
 	gameover;
 	score;
 	charachoice;
-	test;
+	play;
 }
 
 
