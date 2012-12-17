@@ -13,7 +13,11 @@ import flash.utils.Timer;
 
 class SoundManager
 {
-	public static function play (Soundclass:String, ?loop:Int = 0, ?vol:Float = 1, ?balance:Float = 0) :SoundChannel {
+	
+	public static inline var GLOBAL_VOLUME:Float = 1;
+	
+	public static function play (Soundclass:String, ?loop:Int = 0, ?vol:Float = -1, ?balance:Float = 0) :SoundChannel {
+		if (vol == -1) vol = GLOBAL_VOLUME;
 		var _resolvedClass:Class<Dynamic> = Type.resolveClass(Soundclass);
 		if (_resolvedClass == null) return null;
 		var sound:Sound = Type.createInstance(_resolvedClass, []);

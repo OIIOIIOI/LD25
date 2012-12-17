@@ -24,11 +24,12 @@ class Bird extends Entity
 	
 	public var playerOperated:Bool;
 	public var speed:Float;
+	public var target:Entity;
+	public var seed:Seed;
 	private var m_clip:BIRDMC;
 	private var m_scene:Play;
 	private var m_vx:Float;
 	private var m_vy:Float;
-	private var m_target:Entity;
 	private var m_lastShot:Float;
 	private var m_currentInterval:Float;
 	public var state:String;
@@ -64,16 +65,12 @@ class Bird extends Entity
 		m_vx = m_vy = 0;
 		m_lastShot = Date.now().getTime();
 		m_currentInterval = SHOOTING_INTERVAL + (Std.random(Std.int(SHOOTING_INTERVAL * SHOOTING_RANDOM)));
-		
-		if (playerOperated) {
-			KeyboardManager.setCallback(Keyboard.SPACE, shoot);
-		}
 	}
 	
 	public function start () :Void {
 		if (state != STATE_NESTED) return;
 		m_clip.gotoAndStop(2);
-		SoundManager.play("BIRD_CRY_SND");
+		if (playerOperated) SoundManager.play("BIRD_CRY_SND");
 		Timer.delay(realStart, 1000);
 	}
 	
@@ -81,6 +78,9 @@ class Bird extends Entity
 		state = STATE_FLYING;
 		m_clip.gotoAndPlay("fly");
 		m_clip.body.gotoAndStop("fly");
+		if (playerOperated) {
+			KeyboardManager.setCallback(Keyboard.SPACE, shoot);
+		}
 	}
 	
 	override public function update () :Void {
@@ -98,17 +98,34 @@ class Bird extends Entity
 		
 		// Auto choose target and shoot
 		if (!playerOperated) {
-			if (m_target == null) {
+			if (target == null) {
 				if (state == STATE_CARRYING) {
-					m_target = m_scene.nest;
+					target = m_scene.nest;
+					trace("nest + " + seed);
+					//seed = null;
 				}
 				else if (m_scene.seeds != null) {
-					m_target = m_scene.seeds.splice(Std.random(m_scene.seeds.length), 1)[0];
+					var _temp:Array<Seed> = new Array();
+					trace(m_scene.seeds.length + " seeds");
+					for (_s in m_scene.seeds) {
+						if (_s.state != Seed.STATE_LOCKED)
+							_temp.push(_s);
+					}
+					trace(_temp.length + " free seeds");
+					if (_temp.length > 0) {
+						seed = _temp[Std.random(_temp.length)];
+						target = seed;
+						trace("chose " + seed);
+					}
+					else {
+						target = m_scene.nest;
+						seed = null;
+						trace("nest + " + seed);
+					}
 				}
-				else trace("I WON, NOOB!");
 			}
-			if (m_target != null) {
-				var _angle:Float = Math.atan2(m_target.y - y, m_target.x - x) * 180 / Math.PI;
+			else {
+				var _angle:Float = Math.atan2(target.y - y, target.x - x) * 180 / Math.PI;
 				if (scaleX == -1) _angle += 180;
 				if (Math.abs(_angle) > 180) {
 					if (_angle > 0)	_angle -= 360;
@@ -157,7 +174,7 @@ class Bird extends Entity
 	public function hurt () :Void {
 		if (state == STATE_HURT) return;
 		m_clip.body.gotoAndStop("hurt");
-		state = STATE_HURT;
+		//state = STATE_HURT;
 		SoundManager.play("BIRD_HURT_" + Std.random(3) + "_SND");
 		Timer.delay(hurtEnd, 500);
 	}
@@ -168,27 +185,30 @@ class Bird extends Entity
 		state = STATE_FLYING;
 	}
 	
-	public function grab () :Void {
+	public function grab (_seed:Seed) :Void {
 		if (state == STATE_CARRYING) return;
 		m_clip.body.gotoAndStop("carry");
 		state = STATE_CARRYING;
 		SoundManager.play("SEED_GRAB_SND");
 		if (!playerOperated) {
-			m_target = null;
+			target = null;
 		}
+		seed = _seed;
 	}
 	
-	public function unload () :Void {
+	public function unload (_nest:Bool = false) :Void {
 		if (state != STATE_CARRYING) return;
+		trace("unload: " + _nest);
 		m_clip.body.gotoAndStop("fly");
 		state = STATE_FLYING;
-		if (!playerOperated) {
-			m_target = null;
+		if (_nest) {
+			target = null;
 		}
+		seed = null;
 	}
 	
 	public function shoot () :Void {
-		if (state != STATE_FLYING) return;
+		if (state != STATE_FLYING && state != STATE_CARRYING) return;
 		if (playerOperated && Date.now().getTime() - m_lastShot < m_currentInterval) {
 			return;
 		}
