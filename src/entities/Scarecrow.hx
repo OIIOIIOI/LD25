@@ -27,9 +27,9 @@ class Scarecrow extends Entity
 	private var lastShot:Float;
 	private var m_currentInterval:Float;
 	private var m_state:String;
-	public inline static var SHOOTING_INTERVAL:Int = 300;
+	public inline static var SHOOTING_INTERVAL:Int = 100;
 	public inline static var SHOOTING_RANDOM:Float = 1;
-	public inline static var ROTATION_SPEED:Float = 4;
+	public inline static var ROTATION_SPEED:Float = 3;
 	public inline static var STATE_IDLE:String = "state_idle";
 	public inline static var STATE_HURT:String = "state_hurt";
 	
@@ -59,7 +59,14 @@ class Scarecrow extends Entity
 		y = Game.BOTTOM_LINE - 10;
 		lastShot = Date.now().getTime();
 		m_currentInterval = SHOOTING_INTERVAL + (Std.random(Std.int(SHOOTING_INTERVAL * SHOOTING_RANDOM)));
-		
+	}
+	
+	public function start () :Void {
+		if (playerOperated) SoundManager.play("SC_CRY_SND");
+		Timer.delay(realStart, 1000);
+	}
+	
+	private function realStart () :Void {
 		if (playerOperated) {
 			KeyboardManager.setCallback(Keyboard.SPACE, shoot);
 		}
@@ -88,6 +95,7 @@ class Scarecrow extends Entity
 		if (m_state == STATE_HURT) return;
 		m_clip.gotoAndPlay("hurt");
 		m_state = STATE_HURT;
+		SoundManager.play("SC_HURT_SND");
 		Timer.delay(hurtEnd, 2000);
 	}
 	

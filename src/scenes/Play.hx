@@ -103,6 +103,7 @@ class Play extends Scene
 	private function start () :Void {
 		m_started = true;
 		bird.start();
+		scarecrow.start();
 		EventManager.instance.addEventListener(GameEvent.BIRD_SHOOT, gameEventHandler);
 		EventManager.instance.addEventListener(GameEvent.SCARE_SHOOT, gameEventHandler);
 		EventManager.instance.addEventListener(GameEvent.POO_LANDING, gameEventHandler);
@@ -118,13 +119,14 @@ class Play extends Scene
 				_p.y = _event.data.y;
 				m_container.addChild(_p);
 				m_entities.push(_p);
-				SoundManager.play("BIRD_SHOOT_SND");
+				SoundManager.play("BIRD_SHOOT_SND", 0, 0.2);
 			case GameEvent.SCARE_SHOOT:
 				var _p:Corn = new Corn(scarecrow.aim.rotation - 90);
 				_p.x = scarecrow.x + scarecrow.aim.x;
 				_p.y = scarecrow.y + scarecrow.aim.y;
 				m_container.addChild(_p);
 				m_entities.push(_p);
+				SoundManager.play("SC_SHOOT_" + Std.random(3) + "_SND");
 			case GameEvent.POO_LANDING:
 				var _q:Poodle = new Poodle();
 				_q.x = _event.data.x;
@@ -162,7 +164,9 @@ class Play extends Scene
 		_birdHB.y += bird.y;
 		// Collisions
 		if (bird.state == Bird.STATE_CARRYING && _nestHB.intersects(_birdHB)) {
-			bird.unload();
+			trace("lock seed");
+			bird.seed.state = Seed.STATE_LOCKED;
+			bird.unload(true);
 			SoundManager.play("PROGRESS_3_SND");
 		}
 		var _tempHB:Rectangle;
@@ -185,7 +189,7 @@ class Play extends Scene
 				_tempHB.y += _p.y;
 				if (_birdHB.intersects(_tempHB)) {
 					_toKill.push(_p);
-					bird.grab();
+					bird.grab(cast(_p, Seed));
 				}
 			}
 			// Corn/bird collisions
@@ -196,15 +200,15 @@ class Play extends Scene
 				if (_birdHB.intersects(_tempHB)) {
 					_toKill.push(_p);
 					if (bird.state == Bird.STATE_CARRYING) {
-						bird.unload();
 						SoundManager.play("BIRD_HURT_" + Std.random(3) + "_SND");
-						var _seed:Seed = new Seed();
+						var _seed:Seed = bird.seed;
 						_seed.x = bird.x;
 						_seed.y = Math.min(bird.y + 40, Game.BOTTOM_LINE - 50);
 						//trace(bird.x + " / " + bird.y);
+						bird.unload();
 						m_seedsContainer.addChild(_seed);
 						m_entities.push(_seed);
-						seeds.push(_seed);
+						//seeds.push(_seed);
 					}
 					else
 						bird.hurt();

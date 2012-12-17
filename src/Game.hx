@@ -95,8 +95,8 @@ class Game extends Sprite
 			case GameScene.gameover:	new GameOver();
 			case GameScene.score:		new Scores();
 			case GameScene.charachoice:	new CharaChoice();
-			//case GameScene.test:		new Play(Play.MODE_SCARE);
-			case GameScene.test:		new Play(Play.MODE_BIRD);
+			case GameScene.test:		new Play(Play.MODE_SCARE);
+			//case GameScene.test:		new Play(Play.MODE_BIRD);
 		}
 		addChild(scene);
 	}

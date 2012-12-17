@@ -3,7 +3,6 @@ package entities;
 import flash.display.Shape;
 import flash.display.Sprite;
 import flash.geom.Rectangle;
-import scenes.SoundManager;
 import scenes.Play;
 
 /**
@@ -14,9 +13,12 @@ import scenes.Play;
 class Seed extends Entity
 {
 	
+	public var state:String;
+	public inline static var STATE_IDLE:String = "state_idle";
+	public inline static var STATE_FALLING:String = "state_falling";
+	public inline static var STATE_LOCKED:String = "state_locked";
 	private var m_clip:SEEDMC;
 	private var m_vy:Float;
-	private var m_state:Int;
 	
 	public function new () {
 		super();
@@ -32,24 +34,24 @@ class Seed extends Entity
 		addChild(_hit);*/
 		
 		m_vy = 0;
-		m_state = 0;
+		state = STATE_IDLE;
 	}
 	
 	override public function update () :Void {
 		super.update();
 		
-		if (y < Game.BOTTOM_LINE && m_state == 0) {
+		if (y < Game.BOTTOM_LINE && state == STATE_IDLE) {
 			m_vy = 2;
-			m_state = 1;
+			state = STATE_FALLING;
 		}
 		
-		if (m_state == 1) {
+		if (state == STATE_FALLING) {
 			m_vy *= 1.1;
 			m_vy = Math.min(Math.max(m_vy, 0), 6);
 			y += m_vy;
 			if (y > Game.BOTTOM_LINE) {
 				y = Game.BOTTOM_LINE;
-				m_state = 0;
+				state = STATE_IDLE;
 				SoundManager.play("SEED_LAND_SND");
 			}
 		}

@@ -35,7 +35,7 @@ class Corn extends Entity
 		
 		rotation = _rotation;
 		m_state = 0;
-		m_speed = 8;
+		m_speed = 10;
 	}
 	
 	override public function update () :Void {
