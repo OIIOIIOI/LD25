@@ -62,7 +62,7 @@ class Game extends Sprite
 		
 		// Init scene
 		changeScene(GameScene.startMenu);
-		//changeScene(GameScene.test);
+		//changeScene(GameScene.play);
 		
 		// Start main loop
 		lastFrame = 0;
@@ -95,8 +95,9 @@ class Game extends Sprite
 			case GameScene.gameover:	new GameOver();
 			case GameScene.score:		new Scores();
 			case GameScene.charachoice:	new CharaChoice();
-			case GameScene.test:		new Play(Play.MODE_SCARE);
-			//case GameScene.test:		new Play(Play.MODE_BIRD);
+			case GameScene.play:
+				if (_param == null) _param = Play.MODE_BIRD;
+				new Play(_param);
 		}
 		addChild(scene);
 	}
@@ -119,7 +120,7 @@ enum GameScene {
 	gameover;
 	score;
 	charachoice;
-	test;
+	play;
 }
 
 

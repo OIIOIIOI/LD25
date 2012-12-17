@@ -73,13 +73,16 @@ class CharaChoice extends Scene
 		scareselecbtn.addEventListener(MouseEvent.ROLL_OVER, changeselecbtn);
 		birdselecbtn.addEventListener(MouseEvent.ROLL_OVER, changeselecbtn);
 		backbtn.addEventListener(MouseEvent.ROLL_OVER, changeselecbtn);
-		
 	}
 	
 	override private function clickHandler (_event:MouseEvent) :Void {
 		switch (_event.target) {
 			case backbtn:
-				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.startMenu }));
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.startMenu } ));
+			case scareselecbtn:
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.play, param:Play.MODE_SCARE } ));
+			case birdselecbtn:
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.play } ));
 		}
 	}
 	
