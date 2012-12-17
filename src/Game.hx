@@ -16,7 +16,7 @@ import scenes.GameOver;
 import scenes.Scene;
 import scenes.Scores;
 import scenes.StartMenu;
-import scenes.Test;
+import scenes.Play;
 
 /**
  * ...
@@ -96,8 +96,8 @@ class Game extends Sprite
 			case GameScene.gameover:	new GameOver();
 			case GameScene.score:		new Scores();
 			case GameScene.charachoice:	new CharaChoice();
-			case GameScene.test:		new Test(Test.MODE_SCARE);
-			//case GameScene.test:		new Test(Test.MODE_BIRD);
+			//case GameScene.test:		new Play(Play.MODE_SCARE);
+			case GameScene.test:		new Play(Play.MODE_BIRD);
 		}
 		addChild(scene);
 	}

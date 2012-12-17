@@ -22,7 +22,7 @@ import scenes.Scene;
  * @author 01101101
  */
 
-class Test extends Scene
+class Play extends Scene
 {
 	
 	inline static public var MODE_BIRD:String = "mode_bird";

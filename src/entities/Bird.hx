@@ -13,7 +13,7 @@ import flash.ui.Keyboard;
 import haxe.Timer;
 import scenes.Scene;
 import scenes.SoundManager;
-import scenes.Test;
+import scenes.Play;
 
 /**
  * ...
@@ -26,7 +26,7 @@ class Bird extends Entity
 	public var playerOperated:Bool;
 	public var speed:Float;
 	private var m_clip:BIRDMC;
-	private var m_scene:Test;
+	private var m_scene:Play;
 	private var m_vx:Float;
 	private var m_vy:Float;
 	private var m_target:Entity;
@@ -43,11 +43,11 @@ class Bird extends Entity
 	public inline static var STATE_HURT:String = "state_hurt";
 	public inline static var STATE_DONE:String = "state_done";
 	
-	public function new (_scene:Test) {
+	public function new (_scene:Play) {
 		super();
 		
 		m_scene = _scene;
-		playerOperated = (m_scene.mode == Test.MODE_BIRD);
+		playerOperated = (m_scene.mode == Play.MODE_BIRD);
 		
 		m_clip = new BIRDMC();
 		addChild(m_clip);

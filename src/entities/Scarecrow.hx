@@ -9,7 +9,7 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.ui.Keyboard;
 import haxe.Timer;
-import scenes.Test;
+import scenes.Play;
 
 /**
  * ...
@@ -22,7 +22,7 @@ class Scarecrow extends Entity
 	public var playerOperated:Bool;
 	public var aim:AIMMC;
 	private var m_clip:SCARECROWMC;
-	private var m_scene:Test;
+	private var m_scene:Play;
 	private var test:Int;
 	private var lastShot:Float;
 	private var m_currentInterval:Float;
@@ -33,13 +33,13 @@ class Scarecrow extends Entity
 	public inline static var STATE_IDLE:String = "state_idle";
 	public inline static var STATE_HURT:String = "state_hurt";
 	
-	public function new (_scene:Test) {
+	public function new (_scene:Play) {
 		super();
 		
 		m_state = STATE_IDLE;
 		
 		m_scene = _scene;
-		playerOperated = (m_scene.mode == Test.MODE_SCARE);
+		playerOperated = (m_scene.mode == Play.MODE_SCARE);
 		
 		m_clip = new SCARECROWMC();
 		addChild(m_clip);
@@ -75,7 +75,7 @@ class Scarecrow extends Entity
 				aim.rotation += ROTATION_SPEED;
 		}
 		else {
-			var _bird:Bird = cast(Game.instance.scene, Test).bird;
+			var _bird:Bird = cast(Game.instance.scene, Play).bird;
 			aim.rotation = getTargetRotation(_bird);
 		}
 		
