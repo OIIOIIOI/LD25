@@ -37,15 +37,15 @@ class Scores extends Scene
 		
 		
 		//var scoreformat = new TextFormat("GoodDog", 32);
-		var scoreformat = new TextFormat("TrueCrimes", 26);
-		scoreformat.leading = 10;
+		var scoreformat = new TextFormat("TrueCrimes", 22);
+		scoreformat.leading = 15;
 		addChild(scorebg);
 		addChild(backbtn);
 		backbtn.x = 20;
 		backbtn.y = 430;
 		addChild(scDisPos);
-		scDisPos.x = 400;
-		scDisPos.y = 170;
+		scDisPos.x = 470;
+		scDisPos.y = 150;
 		scDisPos.width = 50;
 		scDisPos.height = 300;
 		scDisPos.embedFonts = true;
@@ -54,8 +54,8 @@ class Scores extends Scene
 		scDisPos.defaultTextFormat = scoreformat;
 		scDisPos.text = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
 		addChild(scDisNam);
-		scDisNam.x = 450;
-		scDisNam.y = 170;
+		scDisNam.x = 510;
+		scDisNam.y = 150;
 		scDisNam.width = 200;
 		scDisNam.height = 300;
 		scDisNam.embedFonts = true;
@@ -63,8 +63,8 @@ class Scores extends Scene
 		scDisNam.antiAliasType = AntiAliasType.ADVANCED;
 		scDisNam.defaultTextFormat = scoreformat;
 		addChild(scDisSco);
-		scDisSco.x = 650;
-		scDisSco.y = 170;
+		scDisSco.x = 700;
+		scDisSco.y = 150;
 		scDisSco.width = 200;
 		scDisSco.height = 300;
 		scDisSco.embedFonts = true;
