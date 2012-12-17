@@ -23,7 +23,7 @@
     <option flashStrict="False" />
     <option mainClass="Main" />
     <option enabledebug="True" />
-    <option additional="-swf-lib res/library.swf" />
+    <option additional="-swf-lib res/library.swf&#xA;-swf-lib res/fonts.swf&#xA;-swf-lib res/soundLibrary.swf" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
