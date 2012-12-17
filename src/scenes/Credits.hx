@@ -6,6 +6,7 @@ import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.media.SoundChannel;
 import Game;
+import haxe.Timer;
 
 /**
  * ...
