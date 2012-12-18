@@ -21,20 +21,20 @@ class GameOver extends Scene
 	public var goTF:TextField;
 	private var playernameInput:TextField;
 	private var m_background:GAMEOVERBG;
-	private var changebtn :CHANGEBTN;
+	private var continuebtn :CHANGEBTN;
+	private var retrybtn :RETRYBTN;
 	private var quitbtn :QUITBTN;
 	/*private var extrabtn :EXTRABTN;*/
 	private var victory:Bool;
 	private var scarecrow:Bool;
+	private var m_scoreTF:TextField;
 	
 	public function new (_params:Array<Bool>) {
 		super();
 		
-		ScoreManager.score = 5000;
-		
 		m_background = new GAMEOVERBG();
 		if (_params == null) {
-			_params = [true, true];
+			_params = [true, false];
 		}
 		victory = _params[0];
 		scarecrow = _params[1];
@@ -61,11 +61,29 @@ class GameOver extends Scene
 		goTF.text = (victory) ? "VICTORY" : "DEFEAT";
 		addChild(goTF);
 		
+		// Score
+		_format = new TextFormat("TrueCrimes", 36, 0x000000);
+		_format.align = TextFormatAlign.CENTER;
+		//
+		m_scoreTF = new TextField();
+		m_scoreTF.embedFonts = true;
+		m_scoreTF.antiAliasType = AntiAliasType.ADVANCED;
+		m_scoreTF.defaultTextFormat = _format;
+		m_scoreTF.selectable = false;
+		m_scoreTF.width = 400;
+		m_scoreTF.height = 60;
+		m_scoreTF.x = 450 - m_scoreTF.width / 2;
+		m_scoreTF.y = 25;
+		addChild(m_scoreTF);
+		
 		if (victory) {
+			ScoreManager.score += 1000;
+			
 			var _brush:WHITE_BRUSH = new WHITE_BRUSH();
 			addChild(_brush);
 			
 			_format = new TextFormat("TrashHand", 48, 0xFFFFFF);
+			_format.align = TextFormatAlign.CENTER;
 			
 			playernameInput = new TextField();
 			playernameInput.embedFonts = true;
@@ -74,36 +92,56 @@ class GameOver extends Scene
 			playernameInput.type = TextFieldType.INPUT;
 			playernameInput.width = _brush.width;
 			playernameInput.height = 80;
-			playernameInput.y = 365 - playernameInput.width / 2;
-			playernameInput.x = 350;
+			playernameInput.y = 370 - playernameInput.width / 2;
+			playernameInput.x = 330;
 			playernameInput.maxChars = 8;
 			playernameInput.restrict = "a-zA-Z0-9";
 			playernameInput.text = "YOURNAME";
 			addChild(playernameInput);
 			
-			_brush.x = playernameInput.x;
-			_brush.y = playernameInput.y;
+			_brush.x = playernameInput.x + 15;
+			_brush.y = playernameInput.y - 5;
 		}
 		
-		changebtn = new CHANGEBTN();
+		m_scoreTF.text = Std.string(ScoreManager.score);
+		
 		quitbtn = new QUITBTN();
-		addChild(changebtn);
-		changebtn.y = 430;
-		changebtn.x = 50;
+		quitbtn.x = 50;
+		quitbtn.y = 430;
 		addChild(quitbtn);
-		quitbtn.y = changebtn.y;
-		quitbtn.x = 670;
+		
+		if (victory) {
+			continuebtn = new CHANGEBTN();
+			continuebtn.x = 670;
+			continuebtn.y = quitbtn.y;
+			addChild(continuebtn);
+		}
+		else {
+			retrybtn = new RETRYBTN();
+			retrybtn.x = 670;
+			retrybtn.y = quitbtn.y;
+			addChild(retrybtn);
+		}
 	}
 	
 	override private function clickHandler (_event:MouseEvent) :Void {
 		switch (_event.target) {
 			case quitbtn:
-				SoundManager.play("CLICK_SND", 0, 2);
 				if (victory) ScoreManager.saveScore(playernameInput.text);
-				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.startMenu } ));
-			/*case changebtn:
 				SoundManager.play("CLICK_SND", 0, 2);
-				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.charachoice } ));*/
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.startMenu } ));
+			case continuebtn:
+				if (victory) ScoreManager.saveScore(playernameInput.text);
+				SoundManager.play("CLICK_SND", 0, 2);
+				var _mode:String = Play.MODE_BIRD;
+				if (!scarecrow) _mode = Play.MODE_SCARE;
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.play, param:_mode } ));
+			case retrybtn:
+				if (victory) ScoreManager.saveScore(playernameInput.text);
+				SoundManager.play("CLICK_SND", 0, 2);
+				var _mode:String = Play.MODE_BIRD;
+				if (scarecrow) _mode = Play.MODE_SCARE;
+				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.CHANGE_SCENE, { scene:GameScene.play, param:_mode } ));
 		}
 	}
 }

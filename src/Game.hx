@@ -48,9 +48,9 @@ class Game extends Sprite
 		//SO.clear();
 		if (SO.data.scoresData == null || !Std.is(SO.data.scoresData, Array)) {
 			SO.data.scoresData = new Array<Dynamic>();
-			/*SO.data.scoresData.push( { name:"SIMON", score:2000 }, { name:"GRMPF", score:9100 }, { name:"NI!", score:3400 }, { name:"NOC", score:4500 },  { name:"CAPTAIN", score:1100 } );
-			SO.data.scoresData.sort(function(a:Dynamic, b:Dynamic):Int{ if (a.score > b.score) return 1; if (b.score > a.score) return -1; return 0; } );
-			SO.flush();*/
+			//SO.data.scoresData.push( { name:"SIMON", score:2000 }, { name:"GRMPF", score:9100 }, { name:"NI!", score:3400 }, { name:"NOC", score:4500 },  { name:"CAPTAIN", score:1100 } );
+			//SO.data.scoresData.sort(function(a:Dynamic, b:Dynamic):Int{ if (a.score > b.score) return 1; if (b.score > a.score) return -1; return 0; } );
+			SO.flush();
 		}
 		ScoreManager.initScoreData(SO.data.scoresData);
 		// Wait for the sprite to be added to the display list

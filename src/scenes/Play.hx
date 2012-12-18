@@ -43,12 +43,14 @@ class Play extends Scene
 	public var nest:Nest;
 	public var goTF:TextField;
 	private var m_container:Sprite;
-	private var m_seedsContainer:Sprite;
+	public var m_seedsContainer:Sprite;
 	private var seedIcons:Sprite;
 	private var heartsIcons:Sprite;
 	private var m_bushes:BUSHES;
 	public var started:Bool;
 	private var m_channel:SoundChannel;
+	private var m_scoreTF:TextField;
+	private var m_startTime:Float;
 	
 	public function new (_mode:String) {
 		super();
@@ -58,8 +60,8 @@ class Play extends Scene
 		mode = _mode;
 		started = false;
 		
-		//DAY = (Std.random(2) % 2 == 0);
-		DAY = true;
+		DAY = (Std.random(2) % 2 == 0);
+		//DAY = true;
 		
 		var _sky:Sprite = (DAY) ? new DAYLIGHTBG() : new NIGHTLIGHTBG();
 		addChild(_sky);
@@ -107,7 +109,7 @@ class Play extends Scene
 		
 		if (!DAY) {
 			var _nightFilter:Sprite = new Sprite();
-			_nightFilter.graphics.beginFill(0x486985, 0.7);
+			_nightFilter.graphics.beginFill(0x486985, 0.6);
 			_nightFilter.graphics.drawRect(0, 0, 900, 500);
 			_nightFilter.graphics.endFill();
 			_nightFilter.blendMode = BlendMode.MULTIPLY;
@@ -139,9 +141,7 @@ class Play extends Scene
 		heartsIcons.y = seedIcons.y;
 		addChild(heartsIcons);
 		
-		//var _format:TextFormat = new TextFormat("TrashHand", 60, 0x000000);
 		var _format:TextFormat = new TextFormat("TrueCrimes", 60, 0x941212);
-		//var _format:TextFormat = new TextFormat("TrueCrimes", 24, 0x000000);
 		_format.align = TextFormatAlign.CENTER;
 		
 		goTF = new TextField();
@@ -156,10 +156,28 @@ class Play extends Scene
 		goTF.y = 200;
 		addChild(goTF);
 		
+		// Score
+		_format = new TextFormat("TrueCrimes", 24, 0x000000);
+		if (!DAY) _format.color = 0xFFFFFF;
+		_format.align = TextFormatAlign.CENTER;
+		//
+		m_scoreTF = new TextField();
+		m_scoreTF.embedFonts = true;
+		m_scoreTF.antiAliasType = AntiAliasType.ADVANCED;
+		m_scoreTF.defaultTextFormat = _format;
+		m_scoreTF.selectable = false;
+		m_scoreTF.text = "0";
+		m_scoreTF.width = 400;
+		m_scoreTF.height = 60;
+		m_scoreTF.x = 450 - m_scoreTF.width / 2;
+		m_scoreTF.y = 25;
+		addChild(m_scoreTF);
+		
 		var _track:String = (DAY) ? "DAY_MUSIC" : "NIGHT_MUSIC";
 		
 		m_channel = SoundManager.play(_track, 0, 0.7);
 		
+		m_startTime = Date.now().getTime();
 		Timer.delay(start, 2000);
 	}
 	
@@ -176,6 +194,12 @@ class Play extends Scene
 		EventManager.instance.addEventListener(GameEvent.END_GAME, gameEventHandler);
 		stage.stageFocusRect = false;
 		stage.focus = this;
+		//Timer.delay(startTimePoints, 500);
+		startTimePoints();
+	}
+	
+	private function startTimePoints () :Void {
+		m_startTime = Date.now().getTime();
 	}
 	
 	private function gameEventHandler (_event:GameEvent) :Void {
@@ -210,6 +234,7 @@ class Play extends Scene
 				m_entities.remove(_event.data);
 				if (_event.data.parent != null)	_event.data.parent.removeChild(_event.data);
 			case GameEvent.END_GAME:
+				ScoreManager.score += Std.int((Date.now().getTime() - m_startTime) / 100);
 				started = false;
 				SoundManager.stop(m_channel);
 				Timer.delay(callback(endGame, _event.data), 500);
@@ -224,18 +249,24 @@ class Play extends Scene
 	private function endGame (_victory:Bool) :Void {
 		var _scarecrow:Bool = false;
 		if (_victory) {
+			//trace("victory");
 			if (mode == MODE_SCARE) {
+				//trace("mode bird");
 				SoundManager.play("BIRD_DIE_SND");
 				_scarecrow = true;
 			} else {
+				//trace("mode scarecrow");
 				SoundManager.play("SC_DIE_SND");
 				_scarecrow = false;
 			}
 		} else {
+			//trace("defeat");
 			if (mode == MODE_SCARE) {
+				//trace("mode scarecrow");
 				SoundManager.play("SC_DIE_SND");
 				_scarecrow = true;
 			} else {
+				//trace("mode bird");
 				SoundManager.play("BIRD_DIE_SND");
 				_scarecrow = false;
 			}
@@ -251,6 +282,8 @@ class Play extends Scene
 		super.update();
 		
 		if (!started) return;
+		
+		m_scoreTF.text = Std.string(ScoreManager.score + Std.int((Date.now().getTime() - m_startTime) / 100));
 		
 		// Hitbox scarecrow
 		var _scareHB:Rectangle = scarecrow.hitbox.clone();
@@ -276,7 +309,7 @@ class Play extends Scene
 			if (_droppedSeeds >= 3) {
 				EventManager.instance.dispatchEvent(new GameEvent(GameEvent.END_GAME, (bird.playerOperated)));
 			}
-			SoundManager.play("PROGRESS_3_SND");
+			SoundManager.play("PROGRESS_" + _droppedSeeds + "_SND");
 		}
 		var _tempHB:Rectangle;
 		var _toKill:Array<Entity> = new Array<Entity>();
@@ -289,6 +322,8 @@ class Play extends Scene
 				if (_scareHB.intersects(_tempHB)) {
 					_toKill.push(_p);
 					scarecrow.hurt();
+					if (mode == MODE_BIRD) ScoreManager.validateAction();
+					else					ScoreManager.breakCombo();
 				}
 			}
 			// Seed/bird collisions
@@ -307,6 +342,10 @@ class Play extends Scene
 				_tempHB.x += _p.x;
 				_tempHB.y += _p.y;
 				if (_birdHB.intersects(_tempHB)) {
+					// Score
+					if (mode == MODE_SCARE) ScoreManager.validateAction();
+					else					ScoreManager.breakCombo();
+					// Rest
 					_toKill.push(_p);
 					if (bird.state == Bird.STATE_CARRYING) {
 						SoundManager.play("BIRD_HURT_" + Std.random(3) + "_SND");

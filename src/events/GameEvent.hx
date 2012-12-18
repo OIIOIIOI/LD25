@@ -18,6 +18,7 @@ class GameEvent extends Event
 	inline static public var REMOVE_CORN:String = "remove_corn";
 	inline static public var SCARE_SHOOT:String = "scare_shoot";
 	inline static public var DESTROY_FEATHERS:String = "destroy_feathers";
+	inline static public var SCORE_UPDATE:String = "score_update";
 	inline static public var END_GAME:String = "end_game";
 	
 	public var data:Dynamic;

@@ -4,6 +4,7 @@ import events.EventManager;
 import events.GameEvent;
 import flash.events.MouseEvent;
 import flash.media.SoundChannel;
+import flash.text.TextFormat;
 import flash.ui.Mouse;
 import Game;
 import scenes.Scene;

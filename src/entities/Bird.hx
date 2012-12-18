@@ -191,7 +191,7 @@ class Bird extends Entity
 		var _feathers:Feathers = new Feathers();
 		_feathers.x = x;
 		_feathers.y = y;
-		m_scene.addChild(_feathers);
+		m_scene.m_seedsContainer.addChild(_feathers);
 		Timer.delay(hurtEnd, 500);
 	}
 	

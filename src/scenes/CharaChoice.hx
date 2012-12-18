@@ -6,6 +6,7 @@ import flash.events.MouseEvent;
 import flash.filters.ColorMatrixFilter;
 import flash.geom.ColorTransform;
 import flash.media.SoundChannel;
+import flash.text.AntiAliasType;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
@@ -40,9 +41,6 @@ class CharaChoice extends Scene
 		//birdselecbtn = new BIRDSELEC();
 		charabtn = new CHARABTN();
 		backbtn = new BACKBTN();
-		tutorialtext = new TextField();
-		tutoformat = new TextFormat("GoodDog", 20);
-		tutoformat.align = TextFormatAlign.CENTER;
 		
 		scareselecbtn.y = -4;
 		birdselecbtn.x = 398;
@@ -52,6 +50,12 @@ class CharaChoice extends Scene
 		backbtn.x = 820;
 		backbtn.y = 20;
 		
+		tutoformat = new TextFormat("TrashHand", 20, 0x000000);
+		tutoformat.align = TextFormatAlign.CENTER;
+		
+		tutorialtext = new TextField();
+		tutorialtext.embedFonts = true;
+		tutorialtext.antiAliasType = AntiAliasType.ADVANCED;
 		tutorialtext.defaultTextFormat = tutoformat;
 		tutorialtext.x = 200;
 		tutorialtext.y = 440;

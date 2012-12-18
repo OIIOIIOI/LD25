@@ -27,7 +27,7 @@ class Scores extends Scene
 	{
 		super();
 		
-		ScoreManager.fromHighToLow();
+		//ScoreManager.fromHighToLow();
 		
 		scorebg = new SCOREBG();
 		backbtn =  new BACKBTN();
