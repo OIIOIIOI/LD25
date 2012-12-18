@@ -16,6 +16,7 @@ class Feathers extends Sprite
 	private var m_clip:FEATHERS_BOOM;
 	
 	public function new () {
+		super();
 		m_clip = new FEATHERS_BOOM();
 		addChild(m_clip);
 		m_clip.addEventListener(Event.ENTER_FRAME, enterFrameHandler);
@@ -29,7 +30,7 @@ class Feathers extends Sprite
 	}
 	
 	private function destroy () :Void {
-		EventManager.instance.dispatchEvent(new GameEvent(GameEvent.DESTROY_FEATHERS, {this} ));
+		EventManager.instance.dispatchEvent(new GameEvent(GameEvent.DESTROY_FEATHERS, this));
 	}
 	
 }

@@ -47,7 +47,7 @@ class Play extends Scene
 	private var seedIcons:Sprite;
 	private var heartsIcons:Sprite;
 	private var m_bushes:BUSHES;
-	private var m_started:Bool;
+	public var started:Bool;
 	private var m_channel:SoundChannel;
 	
 	public function new (_mode:String) {
@@ -56,7 +56,7 @@ class Play extends Scene
 		ScoreManager.resetGame();
 		
 		mode = _mode;
-		m_started = false;
+		started = false;
 		
 		//DAY = (Std.random(2) % 2 == 0);
 		DAY = true;
@@ -121,7 +121,7 @@ class Play extends Scene
 		for (i in 0...3) {
 			_icon = new ICONSMC();
 			_icon.gotoAndStop("seed");
-			_icon.x = i * 40;
+			_icon.x = 80 - i * 40;
 			seedIcons.addChild(_icon);
 		}
 		addChild(seedIcons);
@@ -139,7 +139,8 @@ class Play extends Scene
 		heartsIcons.y = seedIcons.y;
 		addChild(heartsIcons);
 		
-		var _format:TextFormat = new TextFormat("TrashHand", 60, 0x000000);
+		//var _format:TextFormat = new TextFormat("TrashHand", 60, 0x000000);
+		var _format:TextFormat = new TextFormat("TrueCrimes", 60, 0x941212);
 		//var _format:TextFormat = new TextFormat("TrueCrimes", 24, 0x000000);
 		_format.align = TextFormatAlign.CENTER;
 		
@@ -163,7 +164,7 @@ class Play extends Scene
 	}
 	
 	private function start () :Void {
-		m_started = true;
+		started = true;
 		bird.start();
 		scarecrow.start();
 		EventManager.instance.addEventListener(GameEvent.BIRD_SHOOT, gameEventHandler);
@@ -173,6 +174,8 @@ class Play extends Scene
 		EventManager.instance.addEventListener(GameEvent.REMOVE_CORN, gameEventHandler);
 		EventManager.instance.addEventListener(GameEvent.DESTROY_FEATHERS, gameEventHandler);
 		EventManager.instance.addEventListener(GameEvent.END_GAME, gameEventHandler);
+		stage.stageFocusRect = false;
+		stage.focus = this;
 	}
 	
 	private function gameEventHandler (_event:GameEvent) :Void {
@@ -198,16 +201,16 @@ class Play extends Scene
 				m_container.addChild(_q);
 				m_entities.push(_q);
 				m_entities.remove(_event.data);
-				m_container.removeChild(_event.data);
+				if (_event.data.parent != null) _event.data.parent.removeChild(_event.data);
 				SoundManager.play("POO_LAND_SND");
 			case GameEvent.REMOVE_POO:
 				m_entities.remove(_event.data);
-				m_container.removeChild(_event.data);
+				if (_event.data.parent != null)	_event.data.parent.removeChild(_event.data);
 			case GameEvent.REMOVE_CORN:
 				m_entities.remove(_event.data);
-				m_container.removeChild(_event.data);
+				if (_event.data.parent != null)	_event.data.parent.removeChild(_event.data);
 			case GameEvent.END_GAME:
-				m_started = false;
+				started = false;
 				SoundManager.stop(m_channel);
 				Timer.delay(callback(endGame, _event.data), 500);
 			case GameEvent.DESTROY_FEATHERS:
@@ -247,7 +250,7 @@ class Play extends Scene
 	override public function update () :Void {
 		super.update();
 		
-		if (!m_started) return;
+		if (!started) return;
 		
 		// Hitbox scarecrow
 		var _scareHB:Rectangle = scarecrow.hitbox.clone();
@@ -320,7 +323,7 @@ class Play extends Scene
 						//trace("real shot (" + bird.state + ")");
 						bird.hurt();
 						var _lives:Int = ScoreManager.shootBird();
-						for (i in 0..._lives) {
+						for (i in 0...3-_lives) {
 							heartsIcons.getChildAt(i).alpha = 0.5;
 						}
 						if (_lives <= 0) {

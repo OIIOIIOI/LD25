@@ -79,12 +79,12 @@ class CharaChoice extends Scene
 				charabtn.gotoAndStop(3);
 				//birdselecbtn.transform.colorTransform = new ColorTransform(0.25, 0.25, 0.25, 1);
 				scareselecbtn.addEventListener(MouseEvent.ROLL_OUT, resetselecbtn);
-				tutorialtext.text = "Stone the starving little birdie and keep the seeds for yerself!\nLEFT/RIGHT to aim and SPACE to spitt";
+				tutorialtext.text = "Stone the starving little birdie and keep the seeds for yerself!\nLEFT/RIGHT to aim and SPACE to spit";
 			case birdselecbtn:
 				charabtn.gotoAndStop(2);
 				//scareselecbtn.transform.colorTransform = new ColorTransform(0.25, 0.25, 0.25, 1);
 				birdselecbtn.addEventListener(MouseEvent.ROLL_OUT, resetselecbtn);
-				tutorialtext.text = "Poo on the dummy, rob the seeds, conquer for wilderness!\nLEFT/RIGHT to rotate and SPACE to drop";
+				tutorialtext.text = "Poo on the dummy, rob the seeds, conquer for wilderness!\nLEFT/RIGHT to turn and SPACE to dung";
 			case backbtn:
 				charabtn.gotoAndStop(4);
 				backbtn.addEventListener(MouseEvent.ROLL_OUT, resetselecbtn);

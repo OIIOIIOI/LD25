@@ -26,7 +26,7 @@ class Scarecrow extends Entity
 	private var lastShot:Float;
 	private var m_currentInterval:Float;
 	private var m_state:String;
-	public inline static var SHOOTING_INTERVAL:Int = 200;
+	public static var SHOOTING_INTERVAL:Int = 300;
 	public inline static var SHOOTING_RANDOM:Float = 1;
 	public inline static var ROTATION_SPEED:Float = 3;
 	public inline static var STATE_IDLE:String = "state_idle";
@@ -39,6 +39,9 @@ class Scarecrow extends Entity
 		
 		m_scene = _scene;
 		playerOperated = (m_scene.mode == Play.MODE_SCARE);
+		
+		if (playerOperated) SHOOTING_INTERVAL = 300;
+		else				SHOOTING_INTERVAL = 600;
 		
 		m_clip = new SCARECROWMC();
 		addChild(m_clip);
@@ -72,6 +75,10 @@ class Scarecrow extends Entity
 	}
 	
 	override public function update () :Void {
+		if (!m_scene.started) {
+			m_clip.stop();
+			return;
+		}
 		super.update();
 		
 		if (playerOperated) {
@@ -86,8 +93,10 @@ class Scarecrow extends Entity
 		}
 		
 		if (!playerOperated && Date.now().getTime() - lastShot > m_currentInterval &&
-			m_state != STATE_HURT && m_scene.bird.state != Bird.STATE_NESTED)
-			shoot();
+			m_state != STATE_HURT && m_scene.bird.state != Bird.STATE_NESTED && m_scene.started) {
+				shoot();
+			}
+			
 	}
 	
 	public function hurt () :Void {

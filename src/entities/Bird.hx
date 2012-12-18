@@ -33,7 +33,7 @@ class Bird extends Entity
 	private var m_lastShot:Float;
 	private var m_currentInterval:Float;
 	public var state:String;
-	public inline static var SHOOTING_INTERVAL:Int = 400;
+	public static var SHOOTING_INTERVAL:Int = 500;
 	public inline static var SHOOTING_RANDOM:Float = 1;
 	public inline static var ROTATION_SPEED:Float = 3;
 	public inline static var MOVEMENT_SPEED:Float = 6;
@@ -48,6 +48,9 @@ class Bird extends Entity
 		
 		m_scene = _scene;
 		playerOperated = (m_scene.mode == Play.MODE_BIRD);
+		
+		if (playerOperated) SHOOTING_INTERVAL = 300;
+		else				SHOOTING_INTERVAL = 600;
 		
 		m_clip = new BIRDMC();
 		addChild(m_clip);
@@ -86,6 +89,10 @@ class Bird extends Entity
 	}
 	
 	override public function update () :Void {
+		if (!m_scene.started) {
+			m_clip.stop();
+			return;
+		}
 		super.update();
 		
 		if (state == STATE_NESTED) return;
@@ -140,8 +147,9 @@ class Bird extends Entity
 					_diff = Math.max(_diff, -ROTATION_SPEED);
 				rotation -= _diff;
 			}
-			if (Date.now().getTime() - m_lastShot > m_currentInterval * 5)
+			if (Date.now().getTime() - m_lastShot > m_currentInterval * 5) {
 				shoot();
+			}
 		}
 		
 		// Avoid flying belly-up
@@ -180,7 +188,7 @@ class Bird extends Entity
 		m_clip.body.gotoAndStop("hurt");
 		//state = STATE_HURT;
 		SoundManager.play("BIRD_HURT_" + Std.random(3) + "_SND");
-		var _feathers:FEATHERS_BOOM = new FEATHERS_BOOM();
+		var _feathers:Feathers = new Feathers();
 		_feathers.x = x;
 		_feathers.y = y;
 		m_scene.addChild(_feathers);
